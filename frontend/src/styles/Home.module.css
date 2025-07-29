@@ -1,0 +1,53 @@
+/* src/styles/Home.module.css */
+.main {
+  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.title {
+  font-size: 3rem;
+  margin: 0.5rem 0;
+  color: #fff;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.heroImg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 2rem auto 0;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.feature {
+  text-align: center;
+}
+
+.featureImg {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.featureTitle {
+  margin-top: 0.75rem;
+  font-size: 1.1rem;
+}

@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "enrols",
+  "info": {
+    "singularName": "enrol",
+    "pluralName": "enrols",
+    "displayName": "Enrol"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroTitle": {
+      "type": "string"
+    }
+  }
+}
