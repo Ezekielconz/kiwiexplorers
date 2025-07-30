@@ -1,11 +1,7 @@
-/* src/app/globals.css */
-
-/* 1) Import Atma at weight 700 (and others) */
-@import url('https://fonts.googleapis.com/css2?family=Atma:wght@300;400;500;600;700&display=swap');
-
-/* 2) Tailwind / resets */
+/* ------------- Tailwind base & resets ------------- */
 @import "tailwindcss";
 
+/* ------------- Theme vars ------------- */
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -14,8 +10,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans:        var(--font-geist-sans);
+  --font-mono:        var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,15 +21,20 @@
   }
 }
 
+/* ------------- Global styles ------------- */
 body {
   background: var(--foreground);
-  color: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color:       var(--background);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-/* 3) Atma utility classes */
-.atma-light   { font-family: "Atma", system-ui; font-weight: 300; }
-.atma-regular { font-family: "Atma", system-ui; font-weight: 400; }
-.atma-medium  { font-family: "Atma", system-ui; font-weight: 500; }
-.atma-semibold{ font-family: "Atma", system-ui; font-weight: 600; }
-.atma-bold    { font-family: "Atma", system-ui; font-weight: 700; }
+/* flex column layout so footer stays at bottom */
+.site  { display: flex; flex-direction: column; min-height: 100vh; }
+.grow  { flex: 1 1 auto; }
+
+/* ------------- Atma utility classes ------------- */
+.atma-light    { font-family: "Atma", system-ui; font-weight: 300; }
+.atma-regular  { font-family: "Atma", system-ui; font-weight: 400; }
+.atma-medium   { font-family: "Atma", system-ui; font-weight: 500; }
+.atma-semibold { font-family: "Atma", system-ui; font-weight: 600; }
+.atma-bold     { font-family: "Atma", system-ui; font-weight: 700; }

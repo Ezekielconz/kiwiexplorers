@@ -1,17 +1,11 @@
 // app/page.js
-
-export const revalidate = 60;  
-
-import { getHomePage } from '@/lib/strapi';
-import HeroClient      from '@/components/HeroClient';
-import styles          from '../styles/Home.module.css';
+import { getHomePage } from '@/lib/strapi'
+import HeroClient      from '@/components/HeroClient'
+import styles          from '../styles/Home.module.css'
 
 export default async function Home() {
-  const data = await getHomePage();
-
-  if (!data) {
-    return <p>No homepage content found.</p>;
-  }
+  const data = await getHomePage()
+  if (!data) return <p>No homepage content found.</p>
 
   const {
     heroTitle,
@@ -20,7 +14,7 @@ export default async function Home() {
     primaryButtonUrl,
     secondaryButtonLabel,
     secondaryButtonUrl,
-  } = data;
+  } = data
 
   return (
     <main className={styles.main}>
@@ -31,5 +25,5 @@ export default async function Home() {
         secondaryButton={{ label: secondaryButtonLabel, url: secondaryButtonUrl }}
       />
     </main>
-  );
+  )
 }
