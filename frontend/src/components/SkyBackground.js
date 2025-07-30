@@ -1,16 +1,15 @@
+// components/SkyBackground.js
 'use client';
 
 import { useState, useEffect } from 'react';
 import Cloud   from './Cloud';
 import Vehicle from './Vehicle';
 
-/* CSS
-   back  – local module that handles z-index, pointer-events & exit slide
-   home  – re-uses existing .cloudContainer / .vehicleContainer rules        */
+/* CSS modules */
 import back  from '../styles/SkyBackground.module.css';
 import home  from '../styles/Home.module.css';
 
-import { useRouteTransition } from '@/contexts/RouteTransitionContext'; // <- exit animation
+import { useRouteTransition } from '@/contexts/RouteTransitionContext';
 
 /* ------------------------------------------------------------
    Clouds are generated **once per browser tab** so positions
@@ -19,7 +18,8 @@ import { useRouteTransition } from '@/contexts/RouteTransitionContext'; // <- ex
 const INITIAL_CLOUDS = Array.from({ length: 10 }).map(() => {
   const dur = Math.random() * 40 + 40;            // 40–80 s
   return {
-    top:      `${Math.random() * 80 + 10}%`,
+    // now 10%–80% (never in bottom 20vh)
+    top:      `${Math.random() * 70 + 10}%`,
     size:     `${Math.random() * 120 + 80}px`,
     duration: `${dur}s`,
     delay:    `${-Math.random() * dur}s`,
@@ -45,12 +45,13 @@ export default function SkyBackground() {
         return [
           ...v,
           {
-            id:  `${Date.now()}-${Math.random()}`,
-            type: kinds[Math.floor(Math.random() * kinds.length)],
-            top:  `${Math.random() * 60 + 20}%`,
-            size: `${Math.random() * 80 + 80}px`,
+            id:    `${Date.now()}-${Math.random()}`,
+            type:  kinds[Math.floor(Math.random() * kinds.length)],
+            // already 20%–80%, so bottom 20vh is clear
+            top:      `${Math.random() * 60 + 20}%`,
+            size:     `${Math.random() * 80 + 80}px`,
             duration: `${dur}s`,
-            delay: '0s',
+            delay:    '0s',
           },
         ];
       });
@@ -65,10 +66,9 @@ export default function SkyBackground() {
     setVehicles(v => v.filter(item => item.id !== id));
 
   /* ---------- Exit-transition support ---------- */
-  const { state, reset } = useRouteTransition();       // idle | exit
+  const { state, reset } = useRouteTransition();
   const exiting = state === 'exit';
 
-  /* ---------- Render ---------- */
   return (
     <div
       className={`${back.backdrop} ${exiting ? back.exit : ''}`}
@@ -76,7 +76,9 @@ export default function SkyBackground() {
       aria-hidden="true"
     >
       <div className={home.cloudContainer}>
-        {clouds.map((c, i) => <Cloud key={`cloud-${i}`} {...c} />)}
+        {clouds.map((c, i) => (
+          <Cloud key={`cloud-${i}`} {...c} />
+        ))}
       </div>
 
       <div className={home.vehicleContainer}>

@@ -89,7 +89,7 @@ export default function AboutPage() {
           </table>
 
           <p>
-            Together these principles nurture confident, capable learners—from our youngest
+            Together these principles nurture confident, capable learners, from our youngest
             infants right up until it’s time for school.
           </p>
         </section>

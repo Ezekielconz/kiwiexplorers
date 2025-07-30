@@ -14,7 +14,6 @@
 
 /* fully transparent over hero / solid after scroll */
 .transparent { background: transparent; box-shadow: none; }
-.solid       { background: #fff;        box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
 .logoWrapper { /* constrain logo on very small if desired */ }
 
