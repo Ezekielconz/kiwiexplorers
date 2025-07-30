@@ -13,6 +13,21 @@
   "attributes": {
     "heroTitle": {
       "type": "string"
+    },
+    "heroSubtitle": {
+      "type": "text"
+    },
+    "primaryButtonLabel": {
+      "type": "string"
+    },
+    "primaryButtonUrl": {
+      "type": "string"
+    },
+    "secondaryButtonLabel": {
+      "type": "string"
+    },
+    "secondaryButtonUrl": {
+      "type": "string"
     }
   }
 }

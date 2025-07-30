@@ -4,8 +4,8 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  /* adjust height to taste */
-  height: 240px;
+  /* fluid height: min 200px, max 300px, ideally 20vh */
+  height: clamp(200px, 20vh, 300px);
 }
 
 .hillSvg {
@@ -13,38 +13,53 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: auto;             /* preserve aspect ratio */
   display: block;
   pointer-events: none;
-  z-index: 0;        /* behind any footer text */
+  z-index: 0;               /* behind any footer text */
 }
 
 .content {
   position: relative;
-  z-index: 1;        /* above the hills */
+  z-index: 1;               /* above the hills */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
   height: 100%;
-  padding-bottom: 1.5rem;
+  padding-bottom: clamp(1rem, 5vw, 2rem);
+  padding-inline: clamp(1rem, 5vw, 2rem);
   color: #fff;
+  font-size: clamp(0.875rem, 2vw, 1rem);
   text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }
 
 .links {
-  margin-top: 0.75rem;
+  margin-top: clamp(0.5rem, 2vw, 1rem);
   display: flex;
-  gap: 1rem;
+  flex-wrap: wrap;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  justify-content: center;
 }
 
 .links a {
   color: #fff;
   text-decoration: none;
   font-weight: 500;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   transition: opacity 0.2s;
 }
 
 .links a:hover {
   opacity: 0.75;
+}
+
+/* On very narrow screens, stack the links vertically */
+@media (max-width: 480px) {
+  .links {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+
 }

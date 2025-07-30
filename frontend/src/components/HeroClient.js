@@ -1,15 +1,15 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
-import Link from 'next/link';
-import styles from '../styles/Home.module.css';
+import { motion } from 'framer-motion'
+import Link       from 'next/link'
+import styles     from '../styles/Home.module.css'
 
-/**
- * Hero section that sits in front of the site-wide SkyBackground.
- * No clouds or vehicles here—those come from SkyBackground,
- * which is mounted once in app/layout.js.
- */
-export default function HeroClient({ heroTitle }) {
+export default function HeroClient({
+  heroTitle,
+  heroSubtitle,
+  primaryButton,
+  secondaryButton,
+}) {
   return (
     <section className={styles.hero}>
       {/* Headline */}
@@ -22,31 +22,39 @@ export default function HeroClient({ heroTitle }) {
         {heroTitle}
       </motion.h1>
 
-      {/* Sub-line */}
+      {/* Subtitle */}
       <motion.p
         className={styles.sub}
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3 }}
       >
-        Where little explorers learn&nbsp;&amp; grow every day!
+        {heroSubtitle}
       </motion.p>
 
       {/* Buttons */}
       <div className={styles.buttonGroup}>
-        <Link href="/about" className={styles.secondaryButton}>
-          Discover
-        </Link>
-        <motion.a
-          href="/enrol"
-          className={styles.cta}
-          initial={{ scale: 0.9 }}
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-        >
-          Enrol&nbsp;Now
-        </motion.a>
+        {secondaryButton?.url && (
+          <Link
+            href={secondaryButton.url}
+            className={styles.secondaryButton}
+          >
+            {secondaryButton.label}
+          </Link>
+        )}
+
+        {primaryButton?.url && (
+          <motion.a
+            href={primaryButton.url}
+            className={styles.cta}
+            initial={{ scale: 0.9 }}
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+          >
+            {primaryButton.label}
+          </motion.a>
+        )}
       </div>
     </section>
-  );
+  )
 }

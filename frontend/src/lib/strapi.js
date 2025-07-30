@@ -16,6 +16,7 @@ const BASE_URL = API_ROOT.replace(/\/$/, '');
 const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || '';
 
 export const HOMEPAGE_SLUG   = process.env.STRAPI_HOMEPAGE_SLUG   || 'homepage';
+export const ABOUTPAGE_SLUG  = process.env.STRAPI_ABOUTPAGE_SLUG  || 'about-page';
 export const NAVIGATION_SLUG = process.env.STRAPI_NAVIGATION_SLUG || 'navigation';
 
 /* ------------------------------------------------------------ */
@@ -23,18 +24,13 @@ export const NAVIGATION_SLUG = process.env.STRAPI_NAVIGATION_SLUG || 'navigation
 /* ------------------------------------------------------------ */
 async function fetchFromStrapi(path, opts = {}) {
   const url = path.startsWith('http') ? path : `${BASE_URL}${path}`;
-
   const headers = {
     ...opts.headers,
     ...(STRAPI_TOKEN && { Authorization: `Bearer ${STRAPI_TOKEN}` }),
   };
-
   const res = await fetch(url, { ...opts, headers });
-
   if (!res.ok) {
-    const msg = `Failed to fetch ${url}: ${res.status}`;
-    // Don’t kill the build—bubble up for graceful handling
-    throw new Error(msg);
+    throw new Error(`Failed to fetch ${url}: ${res.status}`);
   }
   return res.json();
 }
@@ -48,7 +44,17 @@ export async function getHomePage() {
     return data?.attributes ?? data;
   } catch (err) {
     console.error('getHomePage error:', err.message);
-    return null;                      // let the page render a fallback
+    return null;
+  }
+}
+
+export async function getAboutPage() {
+  try {
+    const { data } = await fetchFromStrapi(`/api/${ABOUTPAGE_SLUG}?populate=principles`);
+    return data?.attributes ?? data;
+  } catch (err) {
+    console.error('getAboutPage error:', err.message);
+    return null;
   }
 }
 
@@ -68,11 +74,7 @@ export async function getNavigationLogo() {
     const json    = await fetchFromStrapi(`/api/${NAVIGATION_SLUG}?populate=logo`);
     const logoRaw = json?.data?.attributes?.logo?.data?.attributes;
     if (!logoRaw?.url) return null;
-
-    const url = logoRaw.url.startsWith('/')
-      ? `${BASE_URL}${logoRaw.url}`
-      : logoRaw.url;
-
+    const url = logoRaw.url.startsWith('/') ? `${BASE_URL}${logoRaw.url}` : logoRaw.url;
     return { url, alt: logoRaw.alternativeText || logoRaw.name || '' };
   } catch (err) {
     console.error('getNavigationLogo error:', err.message);

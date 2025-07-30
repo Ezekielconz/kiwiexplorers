@@ -1,0 +1,20 @@
+{
+  "collectionName": "components_principle_principles",
+  "info": {
+    "displayName": "principles",
+    "icon": "book"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "labelMi": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

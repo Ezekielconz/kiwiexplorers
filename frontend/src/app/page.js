@@ -5,9 +5,28 @@ import styles          from '../styles/Home.module.css';
 
 export default async function Home() {
   const data = await getHomePage();
+
+  if (!data) {
+    return <p>No homepage content found.</p>;
+  }
+
+  const {
+    heroTitle,
+    heroSubtitle,
+    primaryButtonLabel,
+    primaryButtonUrl,
+    secondaryButtonLabel,
+    secondaryButtonUrl,
+  } = data;
+
   return (
     <main className={styles.main}>
-      {data ? <HeroClient heroTitle={data.heroTitle} /> : <p>No homepage content found.</p>}
+      <HeroClient
+        heroTitle={heroTitle}
+        heroSubtitle={heroSubtitle}
+        primaryButton={{ label: primaryButtonLabel, url: primaryButtonUrl }}
+        secondaryButton={{ label: secondaryButtonLabel, url: secondaryButtonUrl }}
+      />
     </main>
   );
 }

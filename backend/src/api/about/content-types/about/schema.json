@@ -13,6 +13,20 @@
   "attributes": {
     "heroTitle": {
       "type": "string"
+    },
+    "missionQuote": {
+      "type": "string"
+    },
+    "visionText": {
+      "type": "string"
+    },
+    "philosophy": {
+      "type": "text"
+    },
+    "principles": {
+      "type": "component",
+      "component": "principle.principles",
+      "repeatable": true
     }
   }
 }
