@@ -1,0 +1,42 @@
+/* app/about/About.module.css  (or src/styles/About.module.css if that’s where you keep it) */
+
+.about {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;          /* keeps clouds inside */
+}
+
+.content {
+  position: relative;        /* lift above backdrop */
+  z-index: 1;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 3rem 1rem 4rem;
+  background: rgba(255, 255, 255, 0.85); /* soft card so text stays readable */
+  backdrop-filter: blur(2px);
+  border-radius: 1rem;
+}
+
+.content h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* ▼ All table styles are now scoped via .content */
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.content table thead th {
+  background: #fff9c4;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.content table tbody th,
+.content table tbody td {
+  padding: 0.75rem;
+  border: 1px solid #e0e0e0;
+}
