@@ -12,9 +12,12 @@ if (!API_ROOT) throw new Error('Missing NEXT_PUBLIC_STRAPI_API_URL');
 const BASE_URL     = API_ROOT.replace(/\/$/, '');
 const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || '';
 
-export const HOMEPAGE_SLUG   = process.env.STRAPI_HOMEPAGE_SLUG   || 'homepage';
-export const ABOUTPAGE_SLUG  = process.env.STRAPI_ABOUTPAGE_SLUG  || 'aboutpage';
-export const NAVIGATION_SLUG = process.env.STRAPI_NAVIGATION_SLUG || 'navigation';
+export const HOMEPAGE_SLUG   =
+  (process.env.STRAPI_HOMEPAGE_SLUG   || 'homepage').trim();
+export const ABOUTPAGE_SLUG  =
+  (process.env.STRAPI_ABOUTPAGE_SLUG  || 'aboutpage').trim();
+export const NAVIGATION_SLUG =
+  (process.env.STRAPI_NAVIGATION_SLUG || 'navigation').trim();
 
 /* ------------------------------------------------------------
  * Low-level fetch helper (ISR = 60 s everywhere)
@@ -29,7 +32,7 @@ async function fetchFromStrapi(path, opts = {}) {
   const res = await fetch(url, {
     ...opts,
     headers,
-    next: { revalidate: 60 },   // ← single source of truth
+    next: { revalidate: 60 },       // one source of truth
   });
 
   if (!res.ok) throw new Error(`Strapi ${res.status} on ${url}`);
@@ -67,7 +70,15 @@ async function getCollection(apiId, slug, populate = '*') {
 /* ------------------------------------------------------------
  * Public content helpers
  * ---------------------------------------------------------- */
-export const getHomePage  = () => getSingleType(HOMEPAGE_SLUG, '*');
+export const getHomePage = async () => {
+  try {
+    return await getSingleType(HOMEPAGE_SLUG, '*');
+  } catch (err) {
+    console.error('getHomePage →', err.message);
+    return null;
+  }
+};
+
 export const getAboutPage = () => getSingleType(ABOUTPAGE_SLUG, 'principles');
 
 export const getNavigationLogo = async () => {
@@ -81,7 +92,6 @@ export const getNavigationLogo = async () => {
     const url = raw.url.startsWith('/') ? `${BASE_URL}${raw.url}` : raw.url;
     return { url, alt: raw.alternativeText || raw.name || '' };
   } catch (err) {
-    // 404, network error, or any other failure → log and fall back to null
     console.error('getNavigationLogo →', err.message);
     return null;
   }
