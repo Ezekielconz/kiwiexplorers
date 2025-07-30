@@ -1,53 +1,210 @@
-/* src/styles/Home.module.css */
-.main {
-  padding: 2rem;
-  max-width: 960px;
-  margin: 0 auto;
-}
+/* ---------- Base (mobile-first) ---------- */
 
+.main { font-family: sans-serif; }
+
+/* ---- Hero as sky ---- */
 .hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding-top: 4rem;                 /* less padding on mobile */
+  background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 100%);
   text-align: center;
-  margin-bottom: 4rem;
+  overflow: hidden;
+  z-index: 1;
 }
 
+/* ---- Clouds ---- */
+.cloudContainer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.cloudWrapper {
+  position: absolute;
+  top: var(--cloud-top);
+  left: 0;
+  width: var(--cloud-size);
+  height: calc(var(--cloud-size) * 0.6);
+  animation: moveCloud var(--cloud-duration) linear var(--cloud-delay) infinite;
+  will-change: transform;
+}
+
+@keyframes moveCloud {
+  from { transform: translateX(calc(-1 * var(--cloud-size))); }
+  to   { transform: translateX(calc(100vw + var(--cloud-size))); }
+}
+
+/* ---- Vehicles ---- */
+.vehicleContainer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.vehicleWrapper {
+  position: absolute;
+  top: var(--vehicle-top);
+  left: 0;
+  width: var(--vehicle-size);
+  height: calc(var(--vehicle-size) * 0.6);
+  animation-name: moveVehicle;
+  animation-duration: var(--vehicle-duration);
+  animation-timing-function: linear;
+  animation-delay: var(--vehicle-delay);
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  will-change: transform;
+}
+
+@keyframes moveVehicle {
+  from { transform: translateX(calc(-1 * var(--vehicle-size))); }
+  to   { transform: translateX(calc(100vw + var(--vehicle-size))); }
+}
+.vehicleReverse { animation-direction: reverse; }
+
+/* ---- Text & CTA ---- */
 .title {
-  font-size: 3rem;
-  margin: 0.5rem 0;
-  color: #fff;
+  font-family: var(--font-atma);
+  font-weight: 700;
+  /* Fluid size: 2.5 rem @ 320 px → 6 rem @ 1280 px */
+  font-size: clamp(2.5rem, 5vw + 1rem, 6rem);
+  margin: 0;
+  color: #333;
 }
 
-.subtitle {
-  font-size: 1.25rem;
+.sub {
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  margin: 1rem 0 2rem;
   color: #555;
-  max-width: 600px;
-  margin: 0 auto;
 }
 
-.heroImg {
-  display: block;
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin: 2rem auto 0;
+.buttonGroup {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  align-items: center;
+  flex-wrap: wrap;                  /* wrap on tiny screens */
 }
 
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
+/* ---------- Buttons ---------- */
+.cta,
+.secondaryButton {
+  display: inline-block;
+  padding: 0.65rem 1.5rem;  /* comfy tap target */
+  font-size: 0.95rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s, opacity 0.3s;
 }
 
-.feature {
+/* PRIMARY (Enrol) */
+.cta {
+  background: #FFEB3B;
+  color: #333;
+}
+.cta:hover { opacity: 0.85; }
+
+/* SECONDARY (Discover) — new look */
+.secondaryButton {
+  background: rgba(255, 255, 255, 0.55);  /* translucent white pill */
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);     /* Safari */
+  border: 2px solid #FFEB3B;              /* keeps brand colour */
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.secondaryButton:hover,
+.secondaryButton:focus-visible {
+  background: #FFEB3B;                    /* fill on hover / focus */
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* ---- Programs section ---- */
+.programs {
+  padding: 3rem 1.25rem;
+  background: #fff;
   text-align: center;
 }
 
-.featureImg {
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
+.programs h2 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: 1.75rem;
+  color: #333;
 }
 
-.featureTitle {
-  margin-top: 0.75rem;
+.cards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  background: #FFFAE5;
+  padding: 1.25rem;
+  border-radius: 12px;
+  flex: 1 1 160px;
+  max-width: 260px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.card h3 {
+  margin-top: 0;
   font-size: 1.1rem;
+  color: #333;
+}
+
+.card p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* ---------- Mobile layering (≤ 767 px) ---------- */
+@media (max-width: 767px) {
+  .vehicleContainer { z-index: -1; }
+  .cloudContainer   { z-index: -2; }
+
+  .title,
+  .sub,
+  .buttonGroup {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+/* ---------- Breakpoints ---------- */
+
+/* ≥ 768 px (tablets & small desktops) */
+@media (min-width: 768px) {
+  .hero { padding-top: 5rem; }
+
+  .buttonGroup { gap: 1rem; }
+
+  .cta,
+  .secondaryButton {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+  }
+
+  .cards { gap: 1.5rem; }
+}
+
+/* ≥ 1280 px (large desktops) */
+@media (min-width: 1280px) {
+  .cta,
+  .secondaryButton {
+    padding: 0.9rem 2.25rem;
+    font-size: 1.05rem;
+  }
 }

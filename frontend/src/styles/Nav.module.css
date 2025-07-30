@@ -1,17 +1,31 @@
 /* src/styles/Nav.module.css */
 
 .nav {
+  position: absolute;    /* sit on top of hero */
+  top: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background: #fafafa;
-  border-bottom: 1px solid #eee;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  z-index: 10;
 }
 
-.logoWrapper {
-  /* keep your logo at a comfortable size */
+/* start fully transparent over the hero */
+.transparent {
+  background: transparent;
+  box-shadow: none;
 }
+
+/* once you scroll past the hero, switch to solid */
+.solid {
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logoWrapper { }
 
 .siteTitle {
   font-size: 1.25rem;
@@ -34,7 +48,7 @@
 .navLink {
   text-decoration: none;
   font-weight: 500;
-  color: #333;
+  color: #fff;            /* white over the hero */
 }
 
 .navLink:hover {

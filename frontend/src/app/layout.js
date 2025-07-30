@@ -1,11 +1,20 @@
 // src/app/layout.js
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, Geist_Mono, Atma } from 'next/font/google'
 import './globals.css'
 import Nav from '@/components/Nav'
 import { getMenuItems, getNavigationLogo } from '@/lib/strapi'
 
+// ► Geist Sans & Mono
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] })
 const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
+
+// ► Atma (all weights so you can reuse it elsewhere; tweak if you only need 700)
+const atma = Atma({
+  variable: '--font-atma',
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  display: 'swap',           // avoids the flash-of-invisible-text
+})
 
 export const metadata = {
   title: 'Create Next App',
@@ -21,7 +30,9 @@ export default async function RootLayout({ children }) {
 
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${atma.variable} antialiased`}
+      >
         {/* site-wide navigation with dynamic logo */}
         <Nav menuItems={menuItems} logo={logo} />
 
