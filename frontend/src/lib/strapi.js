@@ -1,50 +1,57 @@
-// src/lib/strapi.js
+/**
+ * Central Strapi helper
+ * Works in the browser and during Next.js builds
+ * ------------------------------------------------------------
+ */
 
-// 1) Single source of truth for your API root
-const API_URL =
+const API_ROOT =
   process.env.NEXT_PUBLIC_STRAPI_API_URL ||
-  (process.env.NODE_ENV === 'development'
-    ? 'http://localhost:1337'
-    : undefined);
+  (process.env.NODE_ENV === 'development' ? 'http://localhost:1337' : undefined);
 
-if (!API_URL) {
+if (!API_ROOT) {
   throw new Error('Missing NEXT_PUBLIC_STRAPI_API_URL in your environment');
 }
-const BASE_URL = API_URL.replace(/\/$/, '');
+const BASE_URL = API_ROOT.replace(/\/$/, '');
 
-// Slugs from env
-export const HOMEPAGE_SLUG =
-  process.env.STRAPI_HOMEPAGE_SLUG || 'homepage';
-export const NAVIGATION_SLUG =
-  process.env.STRAPI_NAVIGATION_SLUG || 'navigation';
+const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || '';
 
-/**
- * Low-level fetch helper
- */
+export const HOMEPAGE_SLUG   = process.env.STRAPI_HOMEPAGE_SLUG   || 'homepage';
+export const NAVIGATION_SLUG = process.env.STRAPI_NAVIGATION_SLUG || 'navigation';
+
+/* ------------------------------------------------------------ */
+/* Low-level fetch helper                                        */
+/* ------------------------------------------------------------ */
 async function fetchFromStrapi(path, opts = {}) {
   const url = path.startsWith('http') ? path : `${BASE_URL}${path}`;
-  const res = await fetch(url, opts);
+
+  const headers = {
+    ...opts.headers,
+    ...(STRAPI_TOKEN && { Authorization: `Bearer ${STRAPI_TOKEN}` }),
+  };
+
+  const res = await fetch(url, { ...opts, headers });
+
   if (!res.ok) {
-    throw new Error(`Failed to fetch ${url}: ${res.status}`);
+    const msg = `Failed to fetch ${url}: ${res.status}`;
+    // Don’t kill the build—bubble up for graceful handling
+    throw new Error(msg);
   }
   return res.json();
 }
 
-/**
- * Fetch the Homepage single type
- */
+/* ------------------------------------------------------------ */
+/* Content helpers                                               */
+/* ------------------------------------------------------------ */
 export async function getHomePage() {
-  const endpoint = `/api/${HOMEPAGE_SLUG}`;
-  if (process.env.NODE_ENV === 'development') {
-    console.log('⟳ fetching', BASE_URL + endpoint);
+  try {
+    const { data } = await fetchFromStrapi(`/api/${HOMEPAGE_SLUG}?populate=*`);
+    return data?.attributes ?? data;
+  } catch (err) {
+    console.error('getHomePage error:', err.message);
+    return null;                      // let the page render a fallback
   }
-  const { data } = await fetchFromStrapi(endpoint);
-  return data.attributes ?? data;
 }
 
-/**
- * Stubbed menu for now
- */
 export async function getMenuItems() {
   return [
     { label: 'Home',    href: '/'        },
@@ -56,30 +63,19 @@ export async function getMenuItems() {
   ];
 }
 
-/**
- * Fetch the Navigation single type to grab its logo field
- */
 export async function getNavigationLogo() {
   try {
-    const endpoint = `/api/${NAVIGATION_SLUG}?populate=logo`;
-    if (process.env.NODE_ENV === 'development') {
-      console.log('⟳ fetching', BASE_URL + endpoint);
-    }
-    const json = await fetchFromStrapi(endpoint);
-    const raw = json.data;
-    const attrs = raw.attributes ?? raw;
-    const logoData = attrs.logo?.data?.attributes;
-    if (!logoData || !logoData.url) {
-      return null;
-    }
-    // build a full URL if Strapi returns a relative path
-    const url = logoData.url.startsWith('/')
-      ? `${BASE_URL}${logoData.url}`
-      : logoData.url;
-    const alt = logoData.alternativeText || logoData.name || '';
-    return { url, alt };
+    const json    = await fetchFromStrapi(`/api/${NAVIGATION_SLUG}?populate=logo`);
+    const logoRaw = json?.data?.attributes?.logo?.data?.attributes;
+    if (!logoRaw?.url) return null;
+
+    const url = logoRaw.url.startsWith('/')
+      ? `${BASE_URL}${logoRaw.url}`
+      : logoRaw.url;
+
+    return { url, alt: logoRaw.alternativeText || logoRaw.name || '' };
   } catch (err) {
-    console.error('getNavigationLogo error:', err);
+    console.error('getNavigationLogo error:', err.message);
     return null;
   }
 }

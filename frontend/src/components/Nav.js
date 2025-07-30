@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'   // ⬅ add usePathname
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../styles/Nav.module.css'
@@ -9,7 +9,8 @@ import styles from '../styles/Nav.module.css'
 export default function Nav({ menuItems, logo }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const router = useRouter()
+  const router   = useRouter()
+  const pathname = usePathname()                           // ← current route
 
   /* ----- Scroll handler: toggle transparent / solid ----- */
   useEffect(() => {
@@ -65,15 +66,22 @@ export default function Nav({ menuItems, logo }) {
       {/* ---------- Navigation links ---------- */}
       <ul className={listClass}>
         {menuItems.map(item => {
-          const isEnrol   = item.label.toLowerCase() === 'enrol'
-          const linkClass = isEnrol ? styles.enrolButton : styles.navLink
+          const isEnrol = item.label.toLowerCase() === 'enrol'
+          /* current page? root link is special-cased */
+          const isActive =
+            pathname === item.href ||
+            (item.href !== '/' && pathname.startsWith(item.href))
+
+          const linkClass = `${isEnrol ? styles.enrolButton : styles.navLink}
+                             ${isActive ? styles.activeLink : ''}`
 
           return (
             <li key={item.href} className={styles.navItem}>
               <Link
                 href={item.href}
                 className={linkClass}
-                onClick={() => setOpen(false)}      /* close drawer on click */
+                aria-current={isActive ? 'page' : undefined}
+                onClick={() => setOpen(false)}
               >
                 {item.label}
               </Link>

@@ -1,157 +1,123 @@
 /* ---------- Base nav ---------- */
 .nav {
-  position: absolute;          /* sit on top of hero */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* fluid padding: 0.5–1rem vertical, 1–2rem horizontal */
   padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 5vw, 2rem);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   z-index: 10;
 }
 
-/* start fully transparent over the hero */
-.transparent {
-  background: transparent;
-  box-shadow: none;
-}
+/* fully transparent over hero / solid after scroll */
+.transparent { background: transparent; box-shadow: none; }
+.solid       { background: #fff;        box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
 
-/* once you scroll past the hero, switch to solid */
-.solid {
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+.logoWrapper { /* constrain logo on very small if desired */ }
 
-.logoWrapper { /* optional: constrain logo size on small screens */ }
+.siteTitle  { font-family: var(--font-atma); font-weight: 700;
+              font-size: clamp(1rem, 2.5vw, 1.25rem); color: #333; text-decoration:none; }
 
-.siteTitle {
-  font-family: var(--font-atma); /* Atma fallback */
-  font-weight: 700;
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  color: #333;
-  text-decoration: none;
-}
+/* ---------- List ---------- */
+.navList   { display:flex; flex-wrap:wrap; gap:clamp(0.75rem,2vw,1.5rem);
+             list-style:none; margin:0; padding:0; align-items:center; overflow-x:auto; }
+.navItem   {}
 
-.navList {
-  display: flex;
-  flex-wrap: wrap;        /* wrap on small */
-  gap: clamp(0.75rem, 2vw, 1.5rem);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-  overflow-x: auto;       /* allow slight horizontal scroll if tight */
-}
-
-.navItem {}
-
-.navLink {
-  text-decoration: none;
+.navLink,
+.activeLink {                 /* .activeLink will override where applied */
+  position: relative;
+  text-decoration: none;      /* remove default underline */
   font-weight: 500;
-  /* fluid font-size */
   font-size: clamp(0.9rem, 2vw, 1rem);
-  /* white over hero, dark once scrolled */
   color: currentColor;
 }
 
-.transparent .navLink { color: #fff; }
-.solid       .navLink { color: #333; }
-
-.navLink:hover { text-decoration: underline; }
-
-/* ---------- Buttons ---------- */
-.enrolButton {
-  display: inline-block;
-  /* match home .cta: fluid padding & pill shape */
-  padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 4vw, 2rem);
-  font-size: clamp(0.9rem, 2vw, 1rem);
-  background-color: #FFEB3B;   /* bright yellow */
-  color: #333;
-  font-weight: 700;
-  text-decoration: none;
-  border-radius: 999px;
-  transition: opacity 0.3s ease;
+/* animated underline for hover + active on desktop */
+.navLink::after,
+.activeLink::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: #FFEB3B;        /* bright kindergarten yellow */
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
 }
-.enrolButton:hover { opacity: 0.85; }
+.navLink:hover::after   { transform: scaleX(1); }
+.activeLink::after      { transform: scaleX(1); }
+
+/* optional darker text when active */
+.activeLink { color: #FFBF00; }
+
+.transparent .navLink,
+.transparent .activeLink { color:#fff; }
+.solid       .navLink,
+.solid       .activeLink { color:#333; }
+
+/* NO default underline on hover */
+.navLink:hover,
+.activeLink { text-decoration: none; }
+
+/* ---------- Enrol button ---------- */
+.enrolButton { display:inline-block;
+               padding:clamp(0.5rem,1.5vw,0.75rem) clamp(1rem,4vw,2rem);
+               font-size:clamp(0.9rem,2vw,1rem);
+               background:#FFEB3B; color:#333; font-weight:700;
+               text-decoration:none; border-radius:999px; transition:opacity .3s ease; }
+.enrolButton:hover { opacity:.85; }
 
 /* ---------- Burger icon ---------- */
-.burger {
-  /* hide on desktop */
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;                 /* space between lines */
-  width: 32px;
-  height: 32px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  z-index: 15;              /* above the drawer */
-}
-
-/* a single patty */
-.burger div {
-  width: 100%;
-  height: 3px;
-  background: currentColor; /* inherits white / dark from .transparent / .solid */
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  border-radius: 2px;
-}
-
-/* Burger → “X” animation */
-.burgerOpen .line1 { transform: translateY(9px) rotate(45deg); }
-.burgerOpen .line2 { opacity: 0; }
-.burgerOpen .line3 { transform: translateY(-9px) rotate(-45deg); }
+.burger { display:none; flex-direction:column; justify-content:center; gap:6px;
+          width:32px; height:32px; background:none; border:none; cursor:pointer; z-index:15; }
+.burger div { width:100%; height:3px; background:currentColor;
+              transition:transform .3s ease, opacity .3s ease; border-radius:2px; }
+.burgerOpen .line1 { transform:translateY(9px)  rotate(45deg); }
+.burgerOpen .line2 { opacity:0; }
+.burgerOpen .line3 { transform:translateY(-9px) rotate(-45deg); }
 
 /* ---------- Responsive tweaks ---------- */
-/* Shrink logo on very small screens */
-@media (max-width: 480px) {
-  .logoWrapper img,
-  .siteTitle {
-    max-width: clamp(80px, 25vw, 120px);
-    height: auto;
-  }
+@media (max-width:480px){
+  .logoWrapper img,.siteTitle{ max-width:clamp(80px,25vw,120px); height:auto; }
 }
 
-/* ==== MOBILE DRAWER (≤768 px) ==== */
-@media (max-width: 768px) {
-  /* show burger */
-  .burger { display: flex; }
+/* ===== MOBILE DRAWER (≤768 px) ===== */
+@media (max-width:768px){
+  .burger{ display:flex; }
 
-  /* full-width panel, hidden just above the viewport */
-  .navList {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100vh;
-    transform: translateY(-100%);
-    background: #fff;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: clamp(4rem, 10vw, 6rem) 1.5rem 2rem;
-    gap: 1.5rem;
-    overflow-y: auto;
-    transition: transform 0.35s ease;
-    z-index: 12;           /* under burger, above page content */
+  .navList{
+    position:fixed; top:0; left:0; right:0; height:100vh;
+    transform:translateY(-100%);
+    background:#fff;
+    flex-direction:column; align-items:center;
+    padding:clamp(4rem,10vw,6rem) 1.5rem 2rem;
+    gap:1.5rem; overflow-y:auto;
+    transition:transform .35s ease; z-index:12;
   }
-  /* slide down when open */
-  .navListOpen { transform: translateY(0); }
+  .navListOpen{ transform:translateY(0); }
 
-  /* easy tapping + black text */
+  /* big tap targets & always-dark text */
   .navListOpen .navLink,
-  .navListOpen .enrolButton {
-    width: 100%;
-    text-align: center;
-    color: #333 !important; /* override white from .transparent */
+  .navListOpen .activeLink,
+  .navListOpen .enrolButton{
+    width:100%; text-align:center; color:#333 !important;
   }
+
+  /* yellow bar grows down the left for the active link */
+  .navListOpen .activeLink::before{
+    content:''; position:absolute; left:0; top:0;
+    width:4px; height:100%; background:#FFEB3B;
+    animation: growBar .35s ease forwards;
+  }
+  @keyframes growBar{ from{height:0;} to{height:100%;} }
 }
 
-/* Keep desktop layout intact */
-@media (min-width: 769px) {
-  .navListOpen { transform: none; }
+/* keep desktop layout unchanged */
+@media (min-width:769px){
+  .navListOpen{ transform:none; }
 }
