@@ -5,34 +5,39 @@ import { useMemo } from 'react'
 import styles from '../styles/Footer.module.css'
 
 export default function Footer() {
-  // ← change this number to control how many trees appear
-  const TREE_COUNT = 8
+  // ← how many trees you want
+  const TREE_COUNT    = 8
 
-  // constants matching our <svg viewBox="0 0 1200 240">
-  const VIEW_WIDTH      = 1200
-  const TRUNK_BASE      = 501.649 // y-coordinate of the very bottom of the trunk in the raw SVG
+  // SVG coordinate width (matches viewBox="0 0 1200 240")
+  const VIEW_WIDTH    = 1200
+  // bottom of raw SVG trunk
+  const TRUNK_BASE    = 501.649
 
-  // tweak these to change how big/small your trees can be
-  const MIN_SCALE       = 0.18
-  const MAX_SCALE       = 0.30
+  // size variance
+  const MIN_SCALE     = 0.18
+  const MAX_SCALE     = 0.30
 
-  // per-tree baseline range (random for each tree)
-  const BASELINE_MIN    = 160
-  const BASELINE_MAX    = 240
+  // per‐tree baseline range
+  const BASELINE_MIN  = 160
+  const BASELINE_MAX  = 240
 
-  // generate tree positions once per-mount
+  // generate & sort once
   const trees = useMemo(() => {
-    return Array.from({ length: TREE_COUNT }).map(() => {
+    const arr = Array.from({ length: TREE_COUNT }).map(() => {
       const scale    = Math.random() * (MAX_SCALE - MIN_SCALE) + MIN_SCALE
       const x        = Math.random() * VIEW_WIDTH
       const baseline = Math.random() * (BASELINE_MAX - BASELINE_MIN) + BASELINE_MIN
-      // translate so that (trunk base * scale) lands at this tree's baseline
+      // compute y so "trunk bottom" lands at this baseline
       const y        = baseline - TRUNK_BASE * scale
-      return { x, y, scale }
+      return { x, y, scale, baseline }
     })
+    // sort ascending: smallest baseline (higher on hill) first,
+    // largest baseline (lower on hill) last → renders on top
+    arr.sort((a, b) => a.baseline - b.baseline)
+    return arr
   }, [TREE_COUNT])
 
-  // the four <path> fragments from your SVG-Repo tree
+  // your 4 SVG path parts
   const TREE_PATHS = [
     {
       fill: "#95673F",
@@ -66,7 +71,7 @@ export default function Footer() {
           fill="#81C784"
         />
 
-        {/* each tree lands on its own random baseline between 160–240 */}
+        {/* trees sorted so lower ones draw last (on top) */}
         {trees.map(({ x, y, scale }, i) => (
           <g key={i} transform={`translate(${x},${y}) scale(${scale})`}>
             {TREE_PATHS.map((p, j) => (
