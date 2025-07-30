@@ -1,32 +1,47 @@
-'use client';
+'use client'
+
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import styles from '../styles/Nav.module.css'
 
 export default function Nav({ menuItems, logo }) {
   const [scrolled, setScrolled] = useState(false)
+  const [open, setOpen] = useState(false)
+  const router = useRouter()
 
+  /* ----- Scroll handler: toggle transparent / solid ----- */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  /* ----- Close the drawer on route change ----- */
+  useEffect(() => {
+    const close = () => setOpen(false)
+    router.events?.on('routeChangeStart', close)
+    return () => router.events?.off('routeChangeStart', close)
+  }, [router])
+
+  /* ----- Helper classes ----- */
+  const navStateClass = scrolled ? styles.solid : styles.transparent
+  const burgerClass   = `${styles.burger} ${open ? styles.burgerOpen : ''}`
+  const listClass     = `${styles.navList} ${open ? styles.navListOpen : ''}`
+
   return (
-    <nav
-      className={`${styles.nav} ${
-        scrolled ? styles.solid : styles.transparent
-      }`}
-    >
+    <nav className={`${styles.nav} ${navStateClass}`}>
+      {/* ---------- Logo / site title ---------- */}
       <div className={styles.logoWrapper}>
-        <Link href="/">
+        <Link href="/" onClick={() => setOpen(false)}>
           {logo?.url ? (
             <Image
               src={logo.url}
-              alt={logo.alt || 'Logo'}
+              alt={logo.alt || 'Site logo'}
               width={120}
               height={40}
+              priority
             />
           ) : (
             <span className={styles.siteTitle}>Kiwi Explorers</span>
@@ -34,16 +49,31 @@ export default function Nav({ menuItems, logo }) {
         </Link>
       </div>
 
-      <ul className={styles.navList}>
+      {/* ---------- Burger button (mobile) ---------- */}
+      <button
+        type="button"
+        aria-label="Toggle navigation menu"
+        aria-expanded={open}
+        className={burgerClass}
+        onClick={() => setOpen(prev => !prev)}
+      >
+        <div className={styles.line1} />
+        <div className={styles.line2} />
+        <div className={styles.line3} />
+      </button>
+
+      {/* ---------- Navigation links ---------- */}
+      <ul className={listClass}>
         {menuItems.map(item => {
-          const isEnrol = item.label.toLowerCase() === 'enrol'
+          const isEnrol   = item.label.toLowerCase() === 'enrol'
+          const linkClass = isEnrol ? styles.enrolButton : styles.navLink
+
           return (
             <li key={item.href} className={styles.navItem}>
               <Link
                 href={item.href}
-                className={
-                  isEnrol ? styles.enrolButton : styles.navLink
-                }
+                className={linkClass}
+                onClick={() => setOpen(false)}      /* close drawer on click */
               >
                 {item.label}
               </Link>

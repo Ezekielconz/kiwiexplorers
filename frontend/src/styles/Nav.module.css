@@ -1,14 +1,14 @@
-/* src/styles/Nav.module.css */
-
+/* ---------- Base nav ---------- */
 .nav {
-  position: absolute;    /* sit on top of hero */
+  position: absolute;          /* sit on top of hero */
   top: 0;
   left: 0;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
+  /* fluid padding: 0.5–1rem vertical, 1–2rem horizontal */
+  padding: clamp(0.5rem, 2vw, 1rem) clamp(1rem, 5vw, 2rem);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   z-index: 10;
 }
@@ -25,46 +25,133 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.logoWrapper { }
+.logoWrapper { /* optional: constrain logo size on small screens */ }
 
 .siteTitle {
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-family: var(--font-atma); /* Atma fallback */
+  font-weight: 700;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
   color: #333;
   text-decoration: none;
 }
 
 .navList {
   display: flex;
-  gap: 1.5rem;
+  flex-wrap: wrap;        /* wrap on small */
+  gap: clamp(0.75rem, 2vw, 1.5rem);
   list-style: none;
   margin: 0;
   padding: 0;
   align-items: center;
+  overflow-x: auto;       /* allow slight horizontal scroll if tight */
 }
 
-.navItem { }
+.navItem {}
 
 .navLink {
   text-decoration: none;
   font-weight: 500;
-  color: #fff;            /* white over the hero */
+  /* fluid font-size */
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  /* white over hero, dark once scrolled */
+  color: currentColor;
 }
 
-.navLink:hover {
-  text-decoration: underline;
-}
+.transparent .navLink { color: #fff; }
+.solid       .navLink { color: #333; }
 
+.navLink:hover { text-decoration: underline; }
+
+/* ---------- Buttons ---------- */
 .enrolButton {
   display: inline-block;
-  padding: 0.5rem 1rem;
-  background-color: #FFEB3B;
+  /* match home .cta: fluid padding & pill shape */
+  padding: clamp(0.5rem, 1.5vw, 0.75rem) clamp(1rem, 4vw, 2rem);
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  background-color: #FFEB3B;   /* bright yellow */
   color: #333;
-  font-weight: 500;
+  font-weight: 700;
   text-decoration: none;
-  border-radius: 4px;
+  border-radius: 999px;
+  transition: opacity 0.3s ease;
+}
+.enrolButton:hover { opacity: 0.85; }
+
+/* ---------- Burger icon ---------- */
+.burger {
+  /* hide on desktop */
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;                 /* space between lines */
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 15;              /* above the drawer */
 }
 
-.enrolButton:hover {
-  opacity: 0.85;
+/* a single patty */
+.burger div {
+  width: 100%;
+  height: 3px;
+  background: currentColor; /* inherits white / dark from .transparent / .solid */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  border-radius: 2px;
+}
+
+/* Burger → “X” animation */
+.burgerOpen .line1 { transform: translateY(9px) rotate(45deg); }
+.burgerOpen .line2 { opacity: 0; }
+.burgerOpen .line3 { transform: translateY(-9px) rotate(-45deg); }
+
+/* ---------- Responsive tweaks ---------- */
+/* Shrink logo on very small screens */
+@media (max-width: 480px) {
+  .logoWrapper img,
+  .siteTitle {
+    max-width: clamp(80px, 25vw, 120px);
+    height: auto;
+  }
+}
+
+/* ==== MOBILE DRAWER (≤768 px) ==== */
+@media (max-width: 768px) {
+  /* show burger */
+  .burger { display: flex; }
+
+  /* full-width panel, hidden just above the viewport */
+  .navList {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    transform: translateY(-100%);
+    background: #fff;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: clamp(4rem, 10vw, 6rem) 1.5rem 2rem;
+    gap: 1.5rem;
+    overflow-y: auto;
+    transition: transform 0.35s ease;
+    z-index: 12;           /* under burger, above page content */
+  }
+  /* slide down when open */
+  .navListOpen { transform: translateY(0); }
+
+  /* easy tapping + black text */
+  .navListOpen .navLink,
+  .navListOpen .enrolButton {
+    width: 100%;
+    text-align: center;
+    color: #333 !important; /* override white from .transparent */
+  }
+}
+
+/* Keep desktop layout intact */
+@media (min-width: 769px) {
+  .navListOpen { transform: none; }
 }

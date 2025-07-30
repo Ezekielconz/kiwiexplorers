@@ -52,7 +52,6 @@ export async function getMenuItems() {
     { label: 'Gallery', href: '/gallery' },
     { label: 'Team',    href: '/team'    },
     { label: 'Contact', href: '/contact' },
-    // “Enrol” will be styled specially in the Nav component
     { label: 'Enrol',   href: '/enrol'   },
   ];
 }
