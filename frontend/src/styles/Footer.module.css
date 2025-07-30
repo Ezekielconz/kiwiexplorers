@@ -1,0 +1,50 @@
+/* styles/Footer.module.css */
+
+.footer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* adjust height to taste */
+  height: 240px;
+}
+
+.hillSvg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  z-index: 0;        /* behind any footer text */
+}
+
+.content {
+  position: relative;
+  z-index: 1;        /* above the hills */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  padding-bottom: 1.5rem;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.links {
+  margin-top: 0.75rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.links a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.links a:hover {
+  opacity: 0.75;
+}

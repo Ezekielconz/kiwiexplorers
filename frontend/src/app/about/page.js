@@ -1,5 +1,6 @@
-// app/about/page.js  (Server Component – no "use client" here)
-import SkyBackground from '@/components/SkyBackground';   // ← direct import
+// app/about/page.js
+
+import SkyBackground from '@/components/SkyBackground';   
 import styles        from '../../styles/About.module.css';
 
 export const metadata = {
@@ -11,14 +12,13 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <main className={styles.about}>
-      {/* animated backdrop – runs only in the browser because SkyBackground is a client component */}
+      {/* animated backdrop – runs only in the browser */}
       <SkyBackground />
 
-      {/* Actual content */}
+      {/* Actual content card, now centered */}
       <article className={styles.content}>
         <h1>About Kiwi Explorers</h1>
 
-        {/* Mission & Vision */}
         <section>
           <h2>Mission</h2>
           <p>
@@ -32,7 +32,6 @@ export default function AboutPage() {
           </p>
         </section>
 
-        {/* Philosophy */}
         <section>
           <h2>Our Philosophy</h2>
           <p>

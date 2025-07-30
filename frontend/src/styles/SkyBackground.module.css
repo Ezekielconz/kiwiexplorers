@@ -1,0 +1,18 @@
+/* Fixed backdrop that lives for the whole session */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;               /* under Nav (10) & page content (default 1) */
+  pointer-events: none;     /* links remain clickable */
+  overflow: hidden;
+
+  /* 🔵 SKY GRADIENT behind clouds & vehicles */
+  background: linear-gradient(
+    to bottom,
+    #87CEEB 0%,   /* sky-blue */
+    #E0F7FA 100%  /* pale cyan */
+  );
+
+  transition: transform 0.8s ease;   /* for slide/popup exit */
+}
+

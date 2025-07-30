@@ -1,42 +1,92 @@
-/* app/about/About.module.css  (or src/styles/About.module.css if that’s where you keep it) */
+/* app/about/About.module.css */
 
 .about {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-height: 100vh;
-  overflow: hidden;          /* keeps clouds inside */
+  padding: 2rem;
+  background: #E0F7FA;              /* pastel sky blue */
+  position: relative;
+  overflow: hidden;                 /* keep SkyBackground contained */
 }
 
 .content {
-  position: relative;        /* lift above backdrop */
-  z-index: 1;
-  max-width: 60rem;
-  margin: 0 auto;
-  padding: 3rem 1rem 4rem;
-  background: rgba(255, 255, 255, 0.85); /* soft card so text stays readable */
-  backdrop-filter: blur(2px);
+  position: relative;
+  z-index: 1;                       /* above SkyBackground */
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
   border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;               /* center headings & paragraphs */
 }
 
 .content h1 {
-  text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  color: #FFB74D;                   /* warm orange */
 }
 
-/* ▼ All table styles are now scoped via .content */
+.content section {
+  margin-bottom: 2.5rem;
+}
+
+.content h2 {
+  font-size: clamp(1.5rem, 4vw, 1.75rem);
+  color: #FF8A65;                   /* soft coral */
+  margin-bottom: 0.75rem;
+}
+
+.content p {
+  font-size: clamp(1rem, 2.2vw, 1.125rem);
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
 .content table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 .content table thead th {
-  background: #fff9c4;
+  background: #FFF3E0;              /* very light peach */
   padding: 0.75rem;
   text-align: left;
+  font-size: 1.1rem;
+  color: #333;
+  border-bottom: 2px solid #FFCC80;
 }
 
 .content table tbody th,
 .content table tbody td {
   padding: 0.75rem;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #FFE0B2;
+  vertical-align: top;
+}
+
+.content table tbody tr:nth-child(even) {
+  background: #FFFBF8;              /* soft cream stripe */
+}
+
+/* Responsive tweaks */
+@media (max-width: 767px) {
+  .content {
+    padding: 2rem 1rem;
+  }
+  .content h1 {
+    font-size: 2rem;
+  }
+  .content h2 {
+    font-size: 1.5rem;
+  }
+  .content p,
+  .content table {
+    font-size: 1rem;
+  }
 }

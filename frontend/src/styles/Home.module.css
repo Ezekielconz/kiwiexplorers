@@ -1,8 +1,7 @@
 /* ---------- Base (mobile-first) ---------- */
-
 .main { font-family: sans-serif; }
 
-/* ---- Hero as sky ---- */
+/* ---- Hero ---- */
 .hero {
   position: relative;
   display: flex;
@@ -10,14 +9,24 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding-top: 4rem;                 /* less padding on mobile */
-  background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 100%);
+  padding-top: 4rem;
+  /* transparent so we can layer our own overlay */
+  background: transparent;
   text-align: center;
   overflow: hidden;
-  z-index: 1;
+  z-index: 1;              /* sits above global backdrop */
 }
 
-/* ---- Clouds ---- */
+/* subtle colour wash that still lets clouds show through */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;             /* behind hero text, above clouds */
+  pointer-events: none;
+}
+
+/* ---- Clouds (used only when SkyBackground rendered inside Hero) ---- */
 .cloudContainer {
   position: absolute;
   inset: 0;
@@ -75,7 +84,6 @@
 .title {
   font-family: var(--font-atma);
   font-weight: 700;
-  /* Fluid size: 2.5 rem @ 320 px → 6 rem @ 1280 px */
   font-size: clamp(2.5rem, 5vw + 1rem, 6rem);
   margin: 0;
   color: #333;
@@ -92,14 +100,14 @@
   gap: 0.75rem;
   margin-top: 1.25rem;
   align-items: center;
-  flex-wrap: wrap;                  /* wrap on tiny screens */
+  flex-wrap: wrap;
 }
 
 /* ---------- Buttons ---------- */
 .cta,
 .secondaryButton {
   display: inline-block;
-  padding: 0.65rem 1.5rem;  /* comfy tap target */
+  padding: 0.65rem 1.5rem;
   font-size: 0.95rem;
   border-radius: 999px;
   font-weight: 600;
@@ -107,27 +115,22 @@
   transition: background 0.3s, color 0.3s, box-shadow 0.3s, opacity 0.3s;
 }
 
-/* PRIMARY (Enrol) */
-.cta {
-  background: #FFEB3B;
-  color: #333;
-}
+.cta { background: #FFEB3B; color: #333; }
 .cta:hover { opacity: 0.85; }
 
-/* SECONDARY (Discover) — new look */
 .secondaryButton {
-  background: rgba(255, 255, 255, 0.55);  /* translucent white pill */
+  background: rgba(255,255,255,0.55);
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);     /* Safari */
-  border: 2px solid #FFEB3B;              /* keeps brand colour */
+  -webkit-backdrop-filter: blur(4px);
+  border: 2px solid #FFEB3B;
   color: #333;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 .secondaryButton:hover,
 .secondaryButton:focus-visible {
-  background: #FFEB3B;                    /* fill on hover / focus */
+  background: #FFEB3B;
   color: #333;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 /* ---- Programs section ---- */
@@ -138,7 +141,7 @@
 }
 
 .programs h2 {
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: clamp(1.5rem,4vw,2rem);
   margin-bottom: 1.75rem;
   color: #333;
 }
@@ -156,21 +159,13 @@
   border-radius: 12px;
   flex: 1 1 160px;
   max-width: 260px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
 }
 
-.card h3 {
-  margin-top: 0;
-  font-size: 1.1rem;
-  color: #333;
-}
+.card h3 { margin-top: 0; font-size: 1.1rem; color: #333; }
+.card p  { font-size: 0.95rem; color: #555; }
 
-.card p {
-  font-size: 0.95rem;
-  color: #555;
-}
-
-/* ---------- Mobile layering (≤ 767 px) ---------- */
+/* ---------- Mobile layering (≤767 px) ---------- */
 @media (max-width: 767px) {
   .vehicleContainer { z-index: -1; }
   .cloudContainer   { z-index: -2; }
@@ -184,27 +179,15 @@
 }
 
 /* ---------- Breakpoints ---------- */
-
-/* ≥ 768 px (tablets & small desktops) */
 @media (min-width: 768px) {
   .hero { padding-top: 5rem; }
-
   .buttonGroup { gap: 1rem; }
-
   .cta,
-  .secondaryButton {
-    padding: 0.75rem 2rem;
-    font-size: 1rem;
-  }
-
+  .secondaryButton { padding: 0.75rem 2rem; font-size: 1rem; }
   .cards { gap: 1.5rem; }
 }
 
-/* ≥ 1280 px (large desktops) */
 @media (min-width: 1280px) {
   .cta,
-  .secondaryButton {
-    padding: 0.9rem 2.25rem;
-    font-size: 1.05rem;
-  }
+  .secondaryButton { padding: 0.9rem 2.25rem; font-size: 1.05rem; }
 }

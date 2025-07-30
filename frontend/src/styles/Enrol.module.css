@@ -1,0 +1,94 @@
+/* styles/Enrol.module.css */
+
+.enrol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background: #FFF3E0;              /* pastel peach */
+  position: relative;
+  overflow: hidden;                 /* for SkyBackground */
+}
+
+.content {
+  position: relative;
+  z-index: 1;                       /* above SkyBackground */
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  padding: 4rem 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border-radius: 1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.content h1 {
+  margin-bottom: 1.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
+  color: #FF8A65;                   /* warm coral */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form label {
+  font-weight: 600;
+  color: #555;
+}
+
+.form input,
+.form select,
+.form textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  transition: border-color 0.3s ease;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: #FF8A65;
+}
+
+.submitButton {
+  align-self: center;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  background: #FF8A65;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.submitButton:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 767px) {
+  .content {
+    padding: 2rem 1rem;
+  }
+  .form {
+    gap: 1rem;
+  }
+}
