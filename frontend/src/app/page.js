@@ -1,4 +1,7 @@
 // app/page.js
+
+export const revalidate = 60;  
+
 import { getHomePage } from '@/lib/strapi';
 import HeroClient      from '@/components/HeroClient';
 import styles          from '../styles/Home.module.css';
