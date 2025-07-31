@@ -1,11 +1,8 @@
 import Image from 'next/image';
-import SkyBackground from '@/components/SkyBackground';
-import styles from '../../styles/Gallery.module.css';
 import { Modak } from 'next/font/google';
-import {
-  getGalleryContent,
-  getGalleryCategories,
-} from '@/lib/strapi';
+import SkyBackground from '@/components/SkyBackground';
+import styles from '@/styles/Gallery.module.css';
+import { getGalleryContent, getGalleryCategories } from '@/lib/strapi';
 
 const modak = Modak({
   weight: '400',
@@ -19,6 +16,7 @@ export const metadata = {
 };
 
 export default async function GalleryPage() {
+  /* server-side data */
   const [galleryContent, categories] = await Promise.all([
     getGalleryContent(),
     getGalleryCategories(),
@@ -26,13 +24,15 @@ export default async function GalleryPage() {
 
   const headingText = galleryContent?.heroTitle || 'Our Gallery';
 
+  /* same bounce logic as “About” page */
   const heading = headingText.split('').map((ch, i) => {
-    const delay = (i * 0.08).toFixed(2) + 's';
+    const dur   = (1 + Math.random()).toFixed(2) + 's';
+    const delay = (-Math.random()).toFixed(2) + 's';
     return (
       <span
         key={i}
         className={styles.bounce}
-        style={{ animationDelay: delay }}
+        style={{ animationDuration: dur, animationDelay: delay }}
       >
         {ch === ' ' ? '\u00A0' : ch}
       </span>
@@ -48,54 +48,47 @@ export default async function GalleryPage() {
           <span className={styles.galleryTitle}>{heading}</span>
         </h1>
 
-        {categories.length === 0 ? (
-          <p>No gallery categories found.</p>
-        ) : (
-          categories.map((cat) => (
-            <section
-              key={cat.id}
-              className={styles.categorySection}
-              aria-label={cat.title}
-            >
-              <h2 className={styles.categoryTitle}>{cat.title}</h2>
+        {categories.length === 0 && <p>No gallery categories found.</p>}
 
-              {cat.images.length === 0 ? (
-                <p>No images in this category.</p>
-              ) : (
-                <div className={styles.grid}>
-                  {cat.images.map((img, idx) => (
-                    <div key={img.id} className={styles.gridItem}>
-                      <div className={styles.imageWrapper}>
-                        {img.src ? (
-                          <Image
-                            src={img.src}
-                            alt={img.alt || `${cat.title} image ${idx + 1}`}
-                            fill
-                            sizes="(min-width:1000px) 33vw, (min-width:600px) 50vw, 100vw"
-                            style={{ objectFit: 'cover' }}
-                            priority={idx < 3}
-                          />
-                        ) : (
-                          <div
-                            aria-label="missing image"
-                            style={{
-                              background: '#eee',
-                              width: '100%',
-                              height: '100%',
-                            }}
-                          />
-                        )}
-                      </div>
+        {categories.map((cat) => (
+          <section
+            key={cat.id}
+            className={styles.categorySection}
+            aria-label={cat.title}
+          >
+            <h2 className={styles.categoryTitle}>{cat.title}</h2>
+
+            {cat.images.length === 0 ? (
+              <p>No images in this category.</p>
+            ) : (
+              <div className={styles.masonry}>
+                {cat.images.map((img, idx) => (
+                  <figure key={img.id} className={styles.masonryItem}>
+                    <div className={styles.imgWrapper}>
+                      {img.src ? (
+                        <Image
+                          src={img.src}
+                          alt={img.alt || `${cat.title} image ${idx + 1}`}
+                          fill
+                          sizes="(min-width:1000px) 33vw,
+                                 (min-width:600px) 50vw,
+                                 100vw"
+                          style={{ objectFit: 'cover' }}
+                          priority={idx < 3} /* first row eager-loaded */
+                        />
+                      ) : (
+                        <div aria-label="missing image" className={styles.placeholder} />
+                      )}
                       {img.caption && (
-                        <div className={styles.caption}>{img.caption}</div>
+                        <figcaption className={styles.caption}>{img.caption}</figcaption>
                       )}
                     </div>
-                  ))}
-                </div>
-              )}
-            </section>
-          ))
-        )}
+                  </figure>
+                ))}
+              </div>
+            )}
+          </section>
+        ))}
       </section>
     </main>
   );

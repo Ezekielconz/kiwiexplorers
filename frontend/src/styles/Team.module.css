@@ -126,15 +126,6 @@
 .profileCard:hover .thumbWrap     { padding: 0.25em; transform: rotate(0deg); }
 .profileCard:hover .profileImage  { filter: none; }
 
-/* ─────────── Small-screen tweaks ─────────── */
-@media (max-width: 600px) {
-  .profileCard { padding: 0.6em; }
-  .thumbWrap   { width: 100px; height: 100px; }
-  .name        { font-size: 1.1rem; }
-  .title       { font-size: 0.75rem; }
-  .bio         { padding: 0 1em 1em; font-size: 0.9rem; }
-}
-
 /* ─────────── Heading letter bounce ─────────── */
 @keyframes bob {
   0% { transform: translateY(0); }
@@ -200,3 +191,21 @@
   background: linear-gradient(86deg,#2f313a 0 70%,#26c6da 0 100%);
 }
 .profileCard:nth-of-type(6n+6) .bio { color: #2f313a; }
+
+/* ─────────── Small-screen tweaks ─────────── */
+@media (max-width: 600px) {
+  .profileCard { padding: 0.6em; }
+  .thumbWrap   { width: 100px; height: 100px; }
+  .name        { font-size: 1.1rem; }
+  .title       { font-size: 0.75rem; }
+  .bio         { padding: 0 1em 1em; font-size: 0.9rem; }
+  .content h1 {            
+  font-size: clamp(3rem, 5vw, 2.5rem);
+  margin-top: 4rem;
+}
+.content {
+  padding: 0rem;
+  border-radius: 1rem;
+}
+}
+
