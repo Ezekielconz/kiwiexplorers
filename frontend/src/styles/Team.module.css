@@ -194,18 +194,62 @@
 
 /* ─────────── Small-screen tweaks ─────────── */
 @media (max-width: 600px) {
+  /* Card + thumbnail */
   .profileCard { padding: 0.6em; }
-  .thumbWrap   { width: 100px; height: 100px; }
-  .name        { font-size: 1.1rem; }
-  .title       { font-size: 0.75rem; }
-  .bio         { padding: 0 1em 1em; font-size: 0.9rem; }
-  .content h1 {            
-  font-size: clamp(3rem, 5vw, 2.5rem);
-  margin-top: 4rem;
-}
-.content {
-  padding: 0rem;
-  border-radius: 1rem;
-}
+
+  .profileImage {
+  filter: grayscale(0);
 }
 
+  /* Odd cards: shift photo left, and lower it a bit */
+  .thumbWrap {
+    width: 100px;
+    height: 100px;
+    margin-top: 1em;    /* vertical nudge */
+    margin-left: -2em;  /* pull image toward card edge */
+  }
+
+  /* Even cards keep their existing right-side layout */
+  .profileCard:nth-of-type(even) .thumbWrap {
+    width: 100px;
+    height: 100px;
+    margin-top: 0.75em;
+    margin-left: 1.25em;
+    margin-right: -2.5em;
+  }
+
+  /* ───── Ribbons ───── */
+  /* Name ribbon: move farther left (or right on even cards) */
+  .name { 
+    font-size: 1.1rem; 
+    left: 5vmin;          /* NEW: was 9vmin */ 
+  }
+  .profileCard:nth-of-type(even) .name {
+    right: 5vmin;         /* mirror shift */
+    left: auto;
+  }
+
+  /* Title ribbon: move farther right (or left on even cards) */
+  .title { 
+    font-size: 0.75rem; 
+    right: -2vmin;
+    top: -0.8em;         /* NEW: was 9vmin */
+  }
+  .profileCard:nth-of-type(even) .title {
+    left: 5vmin;          /* mirror shift */
+    right: auto;
+  }
+
+  /* Bio copy */
+  .bio { padding: 0 1em 1em; font-size: 0.9rem; }
+
+  /* Heading + inner box */
+  .content h1 {
+    font-size: clamp(3rem, 5vw, 2.5rem);
+    margin-top: 4rem;
+  }
+  .content {
+    padding: 0;
+    border-radius: 1rem;
+  }
+}

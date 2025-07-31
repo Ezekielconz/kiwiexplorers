@@ -35,7 +35,11 @@ const heading = 'Meet the Team'.split('').map((ch, i) => {
       {ch === ' ' ? '\u00A0' : ch}
     </span>
   );
+
+  
 });
+
+
 
 
   return (
