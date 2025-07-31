@@ -53,10 +53,6 @@ export default async function RootLayout({ children }) {
             <PageWrapper>{children}</PageWrapper>
           </main>
 
-          {/* footer (inside RouteTransitionProvider so it can animate) */}
-          <footer className="py-6 text-center text-sm opacity-80">
-            © {new Date().getFullYear()} Kiwi Explorers
-          </footer>
         </RouteTransitionProvider>
       </body>
     </html>
