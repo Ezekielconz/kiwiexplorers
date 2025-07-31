@@ -1,94 +1,202 @@
-/* styles/Team.module.css */
-
+/* ─────────── Page wrapper ─────────── */
 .team {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start;
   min-height: 100vh;
-  padding: 2rem;
-  background: #E8F5E9;              /* pastel mint */
+  padding: 5rem 1rem 2rem;
+  background: #e8f5e9;
   position: relative;
-  overflow: hidden;                 /* for SkyBackground */
+  overflow: hidden;
 }
 
+/* ─────────── Inner content box ─────────── */
 .content {
   position: relative;
-  z-index: 1;                       /* above SkyBackground */
+  z-index: 1;
   width: 100%;
-  max-width: 1000px;
+  max-width: 900px;
   margin: auto;
-  padding: 4rem 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
+  padding: 3rem 2rem;
   border-radius: 1rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
 
-.content h1 {
+.content h1 {               /* Modak font comes via JSX class */
+  font-size: clamp(6rem, 5vw, 2.5rem);
   margin-bottom: 2rem;
-  font-size: clamp(2rem, 5vw, 2.5rem);
-  color: #4CAF50;                   /* fresh green */
+  color: #ffffff;
 }
 
-.profileGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-}
+/* ─────────── List layout ─────────── */
+.profileGrid { padding: 0 0 0 2.5em; margin: 0; list-style: none; }
 
+/* ─────────── Card base (colour overridden below) ─────────── */
 .profileCard {
-  background: #fff;
-  border-radius: 0.75rem;
-  padding: 2rem 1rem 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin: 2rem 0;
+  padding: 0.75em;
+  transform: scale(0.9);
+  transition: all 0.4s ease;
+  color: #2f313a;         /* default dark text */
 }
 
-.profileCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
+.profileCard:nth-of-type(even) { text-align: right; }
 
-.profileImage {
+/* ─────────── Thumbnail wrapper (colour overridden below) ─────────── */
+.thumbWrap {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  float: left;
+  margin-right: 1.25em;
+  transform: rotate(-4deg);
+  transition: all 0.4s ease;
+  border-radius: 0.25em;
+  overflow: hidden;
+}
+.profileCard:nth-of-type(even) .thumbWrap {
+  float: right;
+  margin-left: 1.25em;
+  margin-right: -2.5em;
+  transform: rotate(4deg);
+}
+
+/* thumbnail image */
+.profileImage {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  margin: 0 auto 1rem;
-  display: block;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 0.25em;
+  filter: grayscale(1);
+  background: #2f313a;
+  transition: all 0.4s ease;
 }
 
+/* ─────────── Text area ─────────── */
+.description { padding-top: 0.5rem; }
+
+/* name ribbon */
 .name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #FF7043;                   /* warm accent */
-  margin: 0.5rem 0 0.25rem;
-}
-
-.role {
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #777;
-  margin-bottom: 0.75rem;
-}
-
-.bio {
-  font-size: 0. nine clamp(0. nine rem,2vw,1rem);
-  color: #555;
-  line-height: 1.5;
+  background: #2f313a;
+  display: inline-block;
+  position: absolute;
+  left: 9vmin;
+  transform: rotate(-2deg);
+  transform-origin: left bottom;
   margin: 0;
+  margin-top: -2.3em;
+  padding: 0.4em 0.75em;
+  color: #ffb74d;
+  font-size: 1.35rem;
+  border-radius: 0.25em;
 }
 
-@media (max-width: 767px) {
-  .content {
-    padding: 2rem 1rem;
-  }
-  .profileGrid {
-    gap: 1.5rem;
-  }
-  .profileCard {
-    padding: 1.5rem 1rem 1rem;
-  }
+.profileCard:nth-of-type(even) .name {
+  right: 9vmin; left: auto; transform: rotate(2deg); transform-origin: right bottom;
 }
+
+/* title ribbon */
+.title {
+  background: #2f313a;
+  display: inline-block;
+  position: absolute;
+  right: 9vmin;
+  transform: rotate(2deg);
+  transform-origin: right bottom;
+  top: -1.2em;
+  padding: 0.25em 0.6em;
+  color: #ffdd40;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 0.25em;
+}
+
+.profileCard:nth-of-type(even) .title {
+  left: 9vmin; right: auto; transform: rotate(-2deg); transform-origin: left bottom;
+}
+
+/* body copy */
+.role { display: none; }
+.bio  { font-size: 1rem; line-height: 1.5; margin: 0; padding: 0 2em 1em; }
+
+/* ─────────── Hover effects ─────────── */
+.profileCard:hover         { transform: scale(1); filter: drop-shadow(0 16px 12px #0005); }
+.profileCard:hover .thumbWrap     { padding: 0.25em; transform: rotate(0deg); }
+.profileCard:hover .profileImage  { filter: none; }
+
+/* ─────────── Small-screen tweaks ─────────── */
+@media (max-width: 600px) {
+  .profileCard { padding: 0.6em; }
+  .thumbWrap   { width: 100px; height: 100px; }
+  .name        { font-size: 1.1rem; }
+  .title       { font-size: 0.75rem; }
+  .bio         { padding: 0 1em 1em; font-size: 0.9rem; }
+}
+
+/* ─────────── Heading letter bounce ─────────── */
+@keyframes bob {
+  0% { transform: translateY(0); }
+  50%{ transform: translateY(-8px); }
+ 100%{ transform: translateY(0); }
+}
+.bounce {
+  display: inline-block;
+  animation: bob 1.2s ease-in-out infinite;
+}
+
+/* ─────────── Colour + contrast overrides per card ─────────── */
+.profileCard:nth-of-type(6n+1) {       /* Red */
+  background: linear-gradient(83deg,#ef5350 0 97%,transparent calc(97% + 1px) 100%);
+  color: #ffffff;
+}
+.profileCard:nth-of-type(6n+1) .thumbWrap {
+  background: linear-gradient(-86deg,#2f313a 0 70%,#ef5350 0 100%);
+}
+.profileCard:nth-of-type(6n+1) .bio { color: #ffffff; }
+
+.profileCard:nth-of-type(6n+2) {       /* Blue */
+  background: linear-gradient(-83deg,#42a5f5 0 97%,transparent calc(97% + 1px) 100%);
+  color: #ffffff;
+}
+.profileCard:nth-of-type(6n+2) .thumbWrap {
+  background: linear-gradient(86deg,#2f313a 0 70%,#42a5f5 0 100%);
+}
+.profileCard:nth-of-type(6n+2) .bio { color: #ffffff; }
+
+.profileCard:nth-of-type(6n+3) {       /* Green */
+  background: linear-gradient(83deg,#66bb6a 0 97%,transparent calc(97% + 1px) 100%);
+  color: #ffffff;
+}
+.profileCard:nth-of-type(6n+3) .thumbWrap {
+  background: linear-gradient(-86deg,#2f313a 0 70%,#66bb6a 0 100%);
+}
+.profileCard:nth-of-type(6n+3) .bio { color: #ffffff; }
+
+.profileCard:nth-of-type(6n+4) {       /* Orange */
+  background: linear-gradient(-83deg,#ffa726 0 97%,transparent calc(97% + 1px) 100%);
+  color: #2f313a;
+}
+.profileCard:nth-of-type(6n+4) .thumbWrap {
+  background: linear-gradient(86deg,#2f313a 0 70%,#ffa726 0 100%);
+}
+.profileCard:nth-of-type(6n+4) .bio { color: #2f313a; }
+
+.profileCard:nth-of-type(6n+5) {       /* Purple */
+  background: linear-gradient(83deg,#ab47bc 0 97%,transparent calc(97% + 1px) 100%);
+  color: #ffffff;
+}
+.profileCard:nth-of-type(6n+5) .thumbWrap {
+  background: linear-gradient(-86deg,#2f313a 0 70%,#ab47bc 0 100%);
+}
+.profileCard:nth-of-type(6n+5) .bio { color: #ffffff; }
+
+.profileCard:nth-of-type(6n+6) {       /* Teal */
+  background: linear-gradient(-83deg,#26c6da 0 97%,transparent calc(97% + 1px) 100%);
+  color: #2f313a;
+}
+.profileCard:nth-of-type(6n+6) .thumbWrap {
+  background: linear-gradient(86deg,#2f313a 0 70%,#26c6da 0 100%);
+}
+.profileCard:nth-of-type(6n+6) .bio { color: #2f313a; }

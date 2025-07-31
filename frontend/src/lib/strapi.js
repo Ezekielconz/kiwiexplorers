@@ -5,7 +5,9 @@
 
 const API_ROOT =
   process.env.NEXT_PUBLIC_STRAPI_API_URL ||
-  (process.env.NODE_ENV === 'development' ? 'http://localhost:1337' : undefined);
+  (process.env.NODE_ENV === 'development'
+    ? 'http://localhost:1337'
+    : undefined);
 
 if (!API_ROOT) throw new Error('Missing NEXT_PUBLIC_STRAPI_API_URL');
 
@@ -64,15 +66,7 @@ async function getSingleType(apiId, populate = '*') {
 /* ------------------------------------------------------------
  * Public content helpers
  * ---------------------------------------------------------- */
-export const getHomePage = async () => {
-  try {
-    return await getSingleType(HOMEPAGE_SLUG, '*');
-  } catch (err) {
-    console.error('getHomePage →', err.message);
-    return null;
-  }
-};
-
+export const getHomePage  = () => getSingleType(HOMEPAGE_SLUG, '*');
 export const getAboutPage = () => getSingleType(ABOUTPAGE_SLUG, 'principles');
 
 export const getNavigationLogo = async () => {
@@ -95,23 +89,34 @@ export const getNavigationLogo = async () => {
 export const getTeamMembers = async () => {
   try {
     const json = await fetchFromStrapi(
-      `/api/${TEAM_MEMBERS_SLUG}?populate=photo&sort=sortOrder`
+      `/api/${TEAM_MEMBERS_SLUG}?populate=*`
     );
+
     const items = json?.data || [];
 
     return items.map((item) => {
-      const a   = item.attributes ?? {};
-      const img = a.photo?.data?.attributes;
+      // Some Strapi envs return attributes flat (Name, Title, …)
+      // others nest them under attributes.name, attributes.title, …
+      const src = item.attributes ?? item;
+
+      /* normalise keys so the rest of the app is case-insensitive */
+      const get = (...candidates) =>
+        candidates.reduce((val, key) => val ?? src[key], undefined);
+
+      const media =
+        get('photo', 'Photo')?.data?.attributes ?? get('photo', 'Photo');
+
+      const url = media?.url
+        ? media.url.startsWith('/') ? `${BASE_URL}${media.url}` : media.url
+        : null;
 
       return {
         id:   item.id,
-        name: a.name,
-        role: a.title,
-        bio:  a.bio,
-        img:  img?.url
-          ? img.url.startsWith('/') ? `${BASE_URL}${img.url}` : img.url
-          : null,
-        alt:  img?.alternativeText || a.name || '',
+        name: get('name', 'Name') ?? '—',
+        role: get('title', 'Title', 'role', 'Role') ?? '',
+        bio:  get('bio', 'Bio') ?? '',
+        img:  url,
+        alt:  media?.alternativeText || get('name', 'Name') || '',
       };
     });
   } catch (err) {
