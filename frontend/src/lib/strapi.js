@@ -18,6 +18,8 @@ export const ABOUTPAGE_SLUG  =
   (process.env.STRAPI_ABOUTPAGE_SLUG  || 'aboutpage').trim();
 export const NAVIGATION_SLUG =
   (process.env.STRAPI_NAVIGATION_SLUG || 'navigation').trim();
+export const TEAM_MEMBERS_SLUG =
+  (process.env.STRAPI_TEAM_MEMBERS_SLUG || 'team-members').trim();
 
 /* ------------------------------------------------------------
  * Low-level fetch helper (ISR = 60 s everywhere)
@@ -32,7 +34,7 @@ async function fetchFromStrapi(path, opts = {}) {
   const res = await fetch(url, {
     ...opts,
     headers,
-    next: { revalidate: 60 },       // one source of truth
+    next: { revalidate: 60 },
   });
 
   if (!res.ok) throw new Error(`Strapi ${res.status} on ${url}`);
@@ -57,14 +59,6 @@ async function getSingleType(apiId, populate = '*') {
   const query = populate ? `?populate=${populate}` : '';
   const json  = await fetchFromStrapi(`/api/${apiId}${query}`);
   return unwrap(json);
-}
-
-async function getCollection(apiId, slug, populate = '*') {
-  const query =
-    `?filters[slug][$eq]=${slug}` + (populate ? `&populate=${populate}` : '');
-  const json  = await fetchFromStrapi(`/api/${apiId}${query}`);
-  const items = unwrap(json);
-  return Array.isArray(items) ? items[0] ?? null : items;
 }
 
 /* ------------------------------------------------------------
@@ -94,6 +88,35 @@ export const getNavigationLogo = async () => {
   } catch (err) {
     console.error('getNavigationLogo →', err.message);
     return null;
+  }
+};
+
+/* ---------- Team members (collection) ---------- */
+export const getTeamMembers = async () => {
+  try {
+    const json = await fetchFromStrapi(
+      `/api/${TEAM_MEMBERS_SLUG}?populate=photo&sort=sortOrder`
+    );
+    const items = json?.data || [];
+
+    return items.map((item) => {
+      const a   = item.attributes ?? {};
+      const img = a.photo?.data?.attributes;
+
+      return {
+        id:   item.id,
+        name: a.name,
+        role: a.title,
+        bio:  a.bio,
+        img:  img?.url
+          ? img.url.startsWith('/') ? `${BASE_URL}${img.url}` : img.url
+          : null,
+        alt:  img?.alternativeText || a.name || '',
+      };
+    });
+  } catch (err) {
+    console.error('getTeamMembers →', err.message);
+    return [];
   }
 };
 
