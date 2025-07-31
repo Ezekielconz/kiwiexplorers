@@ -11,16 +11,15 @@ const API_ROOT =
 
 if (!API_ROOT) throw new Error('Missing NEXT_PUBLIC_STRAPI_API_URL');
 
-const BASE_URL     = API_ROOT.replace(/\/$/, '');
+const BASE_URL = API_ROOT.replace(/\/$/, '');
 const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || '';
 
-export const HOMEPAGE_SLUG          = (process.env.STRAPI_HOMEPAGE_SLUG   || 'homepage').trim();
-export const ABOUTPAGE_SLUG         = (process.env.STRAPI_ABOUTPAGE_SLUG  || 'aboutpage').trim();
-export const NAVIGATION_SLUG        = (process.env.STRAPI_NAVIGATION_SLUG || 'navigation').trim();
-export const TEAM_MEMBERS_SLUG      = (process.env.STRAPI_TEAM_MEMBERS_SLUG || 'team-members').trim();
-export const GALLERY_SLUG           = (process.env.STRAPI_GALLERY_SLUG || 'gallery').trim();
-export const GALLERY_CATEGORY_SLUG  = (process.env.STRAPI_GALLERY_CATEGORY_SLUG || 'gallery-categories').trim();
-export const GALLERY_IMAGE_SLUG     = (process.env.STRAPI_GALLERY_IMAGE_SLUG || 'gallery-images').trim(); // for completeness
+export const HOMEPAGE_SLUG = (process.env.STRAPI_HOMEPAGE_SLUG || 'homepage').trim();
+export const ABOUTPAGE_SLUG = (process.env.STRAPI_ABOUTPAGE_SLUG || 'aboutpage').trim();
+export const NAVIGATION_SLUG = (process.env.STRAPI_NAVIGATION_SLUG || 'navigation').trim();
+export const TEAM_MEMBERS_SLUG = (process.env.STRAPI_TEAM_MEMBERS_SLUG || 'team-members').trim();
+export const GALLERY_SLUG = (process.env.STRAPI_GALLERY_SLUG || 'gallery').trim();
+export const GALLERY_CATEGORY_SLUG = (process.env.STRAPI_GALLERY_CATEGORY_SLUG || 'gallery-categories').trim();
 
 /* ------------------------------------------------------------
  * Low-level fetch helper (ISR = 60s everywhere)
@@ -69,7 +68,7 @@ export const getHomePage = async () => {
   try {
     return await getSingleType(HOMEPAGE_SLUG, '*');
   } catch (err) {
-    console.error('getHomePage →', err.message);
+    console.error('getHomePage →', err);
     return null;
   }
 };
@@ -78,7 +77,7 @@ export const getAboutPage = async () => {
   try {
     return await getSingleType(ABOUTPAGE_SLUG, 'principles');
   } catch (err) {
-    console.error('getAboutPage →', err.message);
+    console.error('getAboutPage →', err);
     return null;
   }
 };
@@ -87,23 +86,21 @@ export const getGalleryContent = async () => {
   try {
     return await getSingleType(GALLERY_SLUG, '*');
   } catch (err) {
-    console.error('getGalleryContent →', err.message);
+    console.error('getGalleryContent →', err);
     return null;
   }
 };
 
 export const getNavigationLogo = async () => {
   try {
-    const json = await fetchFromStrapi(
-      `/api/${NAVIGATION_SLUG}?populate=logo`
-    );
+    const json = await fetchFromStrapi(`/api/${NAVIGATION_SLUG}?populate=logo`);
     const raw = json?.data?.attributes?.logo?.data?.attributes;
     if (!raw?.url) return null;
 
     const url = raw.url.startsWith('/') ? `${BASE_URL}${raw.url}` : raw.url;
     return { url, alt: raw.alternativeText || raw.name || '' };
   } catch (err) {
-    console.error('getNavigationLogo →', err.message);
+    console.error('getNavigationLogo →', err);
     return null;
   }
 };
@@ -136,7 +133,7 @@ export const getTeamMembers = async () => {
       };
     });
   } catch (err) {
-    console.error('getTeamMembers →', err.message);
+    console.error('getTeamMembers →', err);
     return [];
   }
 };
@@ -144,52 +141,62 @@ export const getTeamMembers = async () => {
 /* ---------- Gallery categories + their images ---------- */
 export const getGalleryCategories = async () => {
   try {
-    // sort categories and their inner images; populate image media
+    // populate gallery_images and inside each, the media image; sort categories and inner images
     const json = await fetchFromStrapi(
       `/api/${GALLERY_CATEGORY_SLUG}?sort=sortOrder&populate[gallery_images][populate]=image&populate[gallery_images][sort]=sortOrder`
     );
     const items = json?.data || [];
 
-    return items.map((cat) => {
-      const attr = cat.attributes ?? {};
-      const title = attr.title || '—';
-      const slug = attr.slug || '';
+    const normalized = items
+      .map((cat) => {
+        const attr = cat.attributes ?? {};
+        const title = attr.title || '—';
+        const slug = attr.slug || '';
+        const sortOrderCat = typeof attr.sortOrder === 'number' ? attr.sortOrder : 0;
 
-      const images = (attr.gallery_images?.data || []).map((imgItem) => {
-        const a = imgItem.attributes ?? {};
-        const media = a.image?.data?.attributes;
-        const url = media?.url
-          ? media.url.startsWith('/')
-            ? `${BASE_URL}${media.url}`
-            : media.url
-          : null;
+        const images = (attr.gallery_images?.data || [])
+          .map((imgItem) => {
+            const a = imgItem.attributes ?? {};
+            const media = a.image?.data?.attributes;
+            const url = media?.url
+              ? media.url.startsWith('/')
+                ? `${BASE_URL}${media.url}`
+                : media.url
+              : null;
+            const imageSort = typeof a.sortOrder === 'number' ? a.sortOrder : 0;
+
+            return {
+              id: imgItem.id,
+              src: url,
+              alt: media?.alternativeText || a.caption || '',
+              caption: a.caption || '',
+              sortOrder: imageSort,
+            };
+          })
+          .sort((a, b) => a.sortOrder - b.sortOrder);
 
         return {
-          id: imgItem.id,
-          src: url,
-          alt: media?.alternativeText || a.caption || '',
-          caption: a.caption || '',
+          id: cat.id,
+          title,
+          slug,
+          sortOrder: sortOrderCat,
+          images,
         };
-      });
+      })
+      .sort((a, b) => a.sortOrder - b.sortOrder);
 
-      return {
-        id: cat.id,
-        title,
-        slug,
-        images,
-      };
-    });
+    return normalized;
   } catch (err) {
-    console.error('getGalleryCategories →', err.message);
+    console.error('getGalleryCategories →', err);
     return [];
   }
 };
 
 export const getMenuItems = async () => [
-  { label: 'Home',    href: '/'        },
-  { label: 'About',   href: '/about'   },
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about' },
   { label: 'Gallery', href: '/gallery' },
-  { label: 'Team',    href: '/team'    },
+  { label: 'Team', href: '/team' },
   { label: 'Contact', href: '/contact' },
-  { label: 'Enrol',   href: '/enrol'   },
+  { label: 'Enrol', href: '/enrol' },
 ];
