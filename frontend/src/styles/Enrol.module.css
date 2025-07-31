@@ -4,8 +4,8 @@
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 5rem 1rem 2rem;
-  background: #fff3e0; /* pastel peach */
+  padding: 2rem 1rem 2rem;
+  background: #fff3e0;
   position: relative;
   overflow: hidden;
 }
@@ -15,19 +15,17 @@
   position: relative;
   width: 100%;
   max-width: 700px;
-  margin: auto;
-  padding: 3.25rem 2rem 5rem; /* extra bottom for ribbon submit */
+  margin: 15vh auto 0;       /* 🔹 push card below top 20 vh */
+  padding: 3.25rem 2rem 5rem;
   background: linear-gradient(83deg, #ff8a65 0 97%, transparent 97%);
   border-radius: 1rem;
   color: #2f313a;
   transform: scale(0.97);
   transition: transform 0.3s ease;
 }
-.sectionCard:hover {
-  transform: scale(1);
-}
+.sectionCard:hover { transform: scale(1); }
 
-/* ---- Ribbon-style heading like team .name ---- */
+/* ---- Ribbon-style heading ---- */
 .enrolTitle {
   background: #2f313a;
   display: inline-block;
@@ -44,7 +42,6 @@
   z-index: 2;
 }
 
-/* responsive adjust heading */
 @media (max-width: 600px) {
   .enrolTitle {
     left: 50%;
@@ -55,21 +52,9 @@
 }
 
 /* ---- Form layout ---- */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.form label {
-  font-weight: 600;
-  color: inherit;
-}
+.form { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 1rem; }
+.formGroup { display: flex; flex-direction: column; gap: 0.5rem; }
+.form label { font-weight: 600; }
 
 .form input,
 .form textarea {
@@ -88,7 +73,7 @@
   border-color: #ffb74d;
 }
 
-/* ---- Ribbon-style submit button at bottom ---- */
+/* ---- Ribbon-style submit button ---- */
 .submitButton {
   background: #2f313a;
   color: #ffdd40;
@@ -105,9 +90,7 @@
   cursor: pointer;
   transition: opacity 0.3s ease;
 }
-.submitButton:hover {
-  opacity: 0.85;
-}
+.submitButton:hover { opacity: 0.85; }
 
 @media (max-width: 600px) {
   .submitButton {
@@ -123,8 +106,7 @@
 @media (max-width: 767px) {
   .sectionCard {
     padding: 2.75rem 1rem 4.5rem;
+    margin-top: 20vh;        /* 🔹 still leave breathing space on small screens */
   }
-  .form {
-    gap: 1rem;
-  }
+  .form { gap: 1rem; }
 }

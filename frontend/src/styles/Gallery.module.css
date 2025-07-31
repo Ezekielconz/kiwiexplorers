@@ -8,13 +8,13 @@
 /* ---- Frosted-glass content card ---- */
 .content{
   position:relative;z-index:1;width:100%;max-width:1000px;margin:auto;
-  padding:4rem 2rem;border-radius:1rem;text-align:center;
+  padding:4rem 0rem;border-radius:1rem;text-align:center;
 }
 
 /* Heading ribbon */
 .content h1{
   margin-bottom:1.5rem;
-  font-size:clamp(2.5rem,6vw,3.5rem);
+  font-size: clamp(6rem, 5vw, 2.5rem);
   line-height:1.1;
 }
 .galleryTitle{
