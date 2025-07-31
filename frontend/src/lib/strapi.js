@@ -14,13 +14,13 @@ if (!API_ROOT) throw new Error('Missing NEXT_PUBLIC_STRAPI_API_URL');
 const BASE_URL     = API_ROOT.replace(/\/$/, '');
 const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || '';
 
-export const HOMEPAGE_SLUG             = (process.env.STRAPI_HOMEPAGE_SLUG   || 'homepage').trim();
-export const ABOUTPAGE_SLUG            = (process.env.STRAPI_ABOUTPAGE_SLUG  || 'aboutpage').trim();
-export const NAVIGATION_SLUG           = (process.env.STRAPI_NAVIGATION_SLUG || 'navigation').trim();
-export const TEAM_MEMBERS_SLUG         = (process.env.STRAPI_TEAM_MEMBERS_SLUG || 'team-members').trim();
-export const GALLERY_SLUG             = (process.env.STRAPI_GALLERY_SLUG || 'gallery').trim();
-export const GALLERY_CATEGORY_SLUG     = (process.env.STRAPI_GALLERY_CATEGORY_SLUG || 'gallery-categories').trim();
-export const GALLERY_IMAGE_SLUG        = (process.env.STRAPI_GALLERY_IMAGE_SLUG || 'gallery-images').trim(); // not used directly here but kept for symmetry
+export const HOMEPAGE_SLUG          = (process.env.STRAPI_HOMEPAGE_SLUG   || 'homepage').trim();
+export const ABOUTPAGE_SLUG         = (process.env.STRAPI_ABOUTPAGE_SLUG  || 'aboutpage').trim();
+export const NAVIGATION_SLUG        = (process.env.STRAPI_NAVIGATION_SLUG || 'navigation').trim();
+export const TEAM_MEMBERS_SLUG      = (process.env.STRAPI_TEAM_MEMBERS_SLUG || 'team-members').trim();
+export const GALLERY_SLUG           = (process.env.STRAPI_GALLERY_SLUG || 'gallery').trim();
+export const GALLERY_CATEGORY_SLUG  = (process.env.STRAPI_GALLERY_CATEGORY_SLUG || 'gallery-categories').trim();
+export const GALLERY_IMAGE_SLUG     = (process.env.STRAPI_GALLERY_IMAGE_SLUG || 'gallery-images').trim(); // for completeness
 
 /* ------------------------------------------------------------
  * Low-level fetch helper (ISR = 60s everywhere)
@@ -57,9 +57,7 @@ function unwrap(json) {
  * Generic single-type helper
  * ---------------------------------------------------------- */
 async function getSingleType(apiId, populate = '*') {
-  const query = populate
-    ? `?populate=${encodeURIComponent(populate)}`
-    : '';
+  const query = populate ? `?populate=${encodeURIComponent(populate)}` : '';
   const json = await fetchFromStrapi(`/api/${apiId}${query}`);
   return unwrap(json);
 }
@@ -67,9 +65,32 @@ async function getSingleType(apiId, populate = '*') {
 /* ------------------------------------------------------------
  * Public content helpers
  * ---------------------------------------------------------- */
-export const getHomePage       = () => getSingleType(HOMEPAGE_SLUG, '*');
-export const getAboutPage      = () => getSingleType(ABOUTPAGE_SLUG, 'principles');
-export const getGalleryContent = () => getSingleType(GALLERY_SLUG, '*');
+export const getHomePage = async () => {
+  try {
+    return await getSingleType(HOMEPAGE_SLUG, '*');
+  } catch (err) {
+    console.error('getHomePage →', err.message);
+    return null;
+  }
+};
+
+export const getAboutPage = async () => {
+  try {
+    return await getSingleType(ABOUTPAGE_SLUG, 'principles');
+  } catch (err) {
+    console.error('getAboutPage →', err.message);
+    return null;
+  }
+};
+
+export const getGalleryContent = async () => {
+  try {
+    return await getSingleType(GALLERY_SLUG, '*');
+  } catch (err) {
+    console.error('getGalleryContent →', err.message);
+    return null;
+  }
+};
 
 export const getNavigationLogo = async () => {
   try {
@@ -123,7 +144,7 @@ export const getTeamMembers = async () => {
 /* ---------- Gallery categories + their images ---------- */
 export const getGalleryCategories = async () => {
   try {
-    // populate related gallery_images (with their image media) and sort both categories and images
+    // sort categories and their inner images; populate image media
     const json = await fetchFromStrapi(
       `/api/${GALLERY_CATEGORY_SLUG}?sort=sortOrder&populate[gallery_images][populate]=image&populate[gallery_images][sort]=sortOrder`
     );
