@@ -2,6 +2,12 @@
 
 import SkyBackground from '@/components/SkyBackground';
 import styles        from '../../styles/Enrol.module.css';
+import { Modak }     from 'next/font/google';
+
+const modak = Modak({
+  weight: '400',
+  subsets: ['latin'],
+});
 
 export const metadata = {
   title: 'Enrol – Kiwi Explorers',
@@ -11,11 +17,13 @@ export const metadata = {
 export default function EnrolPage() {
   return (
     <main className={styles.enrol}>
-      {/* animated backdrop (client-only) */}
       <SkyBackground />
 
-      <section className={styles.content}>
-        <h1>Enrol Your Child</h1>
+      <section className={styles.sectionCard}>
+        <h1 className={`${styles.enrolTitle} ${modak.className}`}>
+          Enrol Your Child
+        </h1>
+
         <form className={styles.form} action="/api/enrol" method="POST">
           <div className={styles.formGroup}>
             <label htmlFor="childName">Child’s Full Name</label>
@@ -49,7 +57,7 @@ export default function EnrolPage() {
 
           <div className={styles.formGroup}>
             <label htmlFor="notes">Additional Notes</label>
-            <textarea id="notes" name="notes" rows="4" />
+            <textarea id="notes" name="notes" rows={4} />
           </div>
 
           <button type="submit" className={styles.submitButton}>

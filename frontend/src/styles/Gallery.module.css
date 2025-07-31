@@ -1,19 +1,21 @@
-/* styles/Gallery.module.css */
+/* ---- Modak font is injected via next/font on the heading ---- */
 
+/* ---- Page backdrop ---- */
 .gallery {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start;
   min-height: 100vh;
-  padding: 2rem;
-  background: #FFFDE7;              /* pastel yellow */
+  padding: 5rem 1rem 2rem;
+  background: #fffde7; /* pastel yellow */
   position: relative;
-  overflow: hidden;                 /* for SkyBackground */
+  overflow: hidden;
 }
 
+/* ---- Frosted-glass content card ---- */
 .content {
   position: relative;
-  z-index: 1;                       /* above SkyBackground */
+  z-index: 1;
   width: 100%;
   max-width: 1000px;
   margin: auto;
@@ -25,38 +27,78 @@
   text-align: center;
 }
 
+/* ribbon-style animated heading */
 .content h1 {
   margin-bottom: 1.5rem;
-  font-size: clamp(2rem, 5vw, 2.5rem);
-  color: #FFB74D;                   /* warm orange */
+  font-size: clamp(2.5rem, 6vw, 3.5rem);
+  line-height: 1.1;
 }
 
+/* title ribbon behind heading text */
+.galleryTitle {
+  background: #2f313a;
+  display: inline-block;
+  padding: 0.4em 0.75em;
+  border-radius: 0.25em;
+  color: #ffb74d;
+  transform: rotate(-2deg);
+  transform-origin: left bottom;
+  position: relative;
+}
+
+/* grid of images */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .gridItem {
   overflow: hidden;
   border-radius: 0.75rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
 .gridItem:hover {
   transform: translateY(-5px);
 }
 
-.gridItem img {
+/* wrapper to give aspect ratio for next/image fill */
+.imageWrapper {
+  position: relative;
   width: 100%;
-  height: auto;
-  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 0.75rem;
 }
 
+/* ---- Letter bob animation for heading characters ---- */
+@keyframes bob {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.bounce {
+  display: inline-block;
+  animation-name: bob;
+  animation-duration: 1.2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* ---- Responsive tweaks ---- */
 @media (max-width: 767px) {
   .content {
-    padding: 2rem 1rem;
+    padding: 2.5rem 1rem;
   }
   .grid {
     gap: 1rem;

@@ -1,92 +1,128 @@
-/* styles/Enrol.module.css */
-
+/* ---- Page backdrop ---- */
 .enrol {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: flex-start;
   min-height: 100vh;
-  padding: 2rem;
-  background: #FFF3E0;              /* pastel peach */
+  padding: 5rem 1rem 2rem;
+  background: #fff3e0; /* pastel peach */
   position: relative;
-  overflow: hidden;                 /* for SkyBackground */
+  overflow: hidden;
 }
 
-.content {
+/* ---- Stripe card container ---- */
+.sectionCard {
   position: relative;
-  z-index: 1;                       /* above SkyBackground */
   width: 100%;
   max-width: 700px;
   margin: auto;
-  padding: 4rem 2rem;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(4px);
+  padding: 3.25rem 2rem 5rem; /* extra bottom for ribbon submit */
+  background: linear-gradient(83deg, #ff8a65 0 97%, transparent 97%);
   border-radius: 1rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  color: #2f313a;
+  transform: scale(0.97);
+  transition: transform 0.3s ease;
+}
+.sectionCard:hover {
+  transform: scale(1);
 }
 
-.content h1 {
-  margin-bottom: 1.5rem;
-  font-size: clamp(2rem, 5vw, 2.5rem);
-  color: #FF8A65;                   /* warm coral */
+/* ---- Ribbon-style heading like team .name ---- */
+.enrolTitle {
+  background: #2f313a;
+  display: inline-block;
+  position: absolute;
+  left: 9vmin;
+  top: -2.3em;
+  transform: rotate(-2deg);
+  transform-origin: left bottom;
+  margin: 0;
+  padding: 0.4em 0.75em;
+  color: #ffb74d;
+  font-size: 1.75rem;
+  border-radius: 0.25em;
+  z-index: 2;
 }
 
+/* responsive adjust heading */
+@media (max-width: 600px) {
+  .enrolTitle {
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    font-size: 1.4rem;
+    top: -1.8em;
+  }
+}
+
+/* ---- Form layout ---- */
 .form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  text-align: left;
+  margin-top: 1rem;
 }
-
 .formGroup {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-
 .form label {
   font-weight: 600;
-  color: #555;
+  color: inherit;
 }
 
 .form input,
-.form select,
 .form textarea {
   width: 100%;
   padding: 0.75rem 1rem;
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid #e0c3b0;
   border-radius: 0.5rem;
   transition: border-color 0.3s ease;
+  background: #fff;
+  color: #2f313a;
 }
-
 .form input:focus,
-.form select:focus,
 .form textarea:focus {
   outline: none;
-  border-color: #FF8A65;
+  border-color: #ffb74d;
 }
 
+/* ---- Ribbon-style submit button at bottom ---- */
 .submitButton {
-  align-self: center;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  background: #FF8A65;
-  color: #fff;
+  background: #2f313a;
+  color: #ffdd40;
   border: none;
-  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  position: absolute;
+  right: 9vmin;
+  bottom: -2em;
+  transform: rotate(2deg);
+  transform-origin: right top;
+  padding: 0.6em 1.8em;
+  border-radius: 0.25em;
   cursor: pointer;
   transition: opacity 0.3s ease;
 }
-
 .submitButton:hover {
   opacity: 0.85;
 }
 
+@media (max-width: 600px) {
+  .submitButton {
+    right: 50%;
+    bottom: -1.6em;
+    transform: translateX(50%) rotate(2deg);
+    padding: 0.55em 1.5em;
+    font-size: 0.9rem;
+  }
+}
+
+/* ---- Mobile tweaks ---- */
 @media (max-width: 767px) {
-  .content {
-    padding: 2rem 1rem;
+  .sectionCard {
+    padding: 2.75rem 1rem 4.5rem;
   }
   .form {
     gap: 1rem;

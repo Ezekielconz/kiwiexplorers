@@ -1,64 +1,125 @@
 /* ---- Page backdrop ---- */
-.contact{
-  display:flex;justify-content:center;align-items:flex-start;
-  min-height:100vh;padding:5rem 1rem 2rem;background:#f3e5f5;
-  position:relative;overflow:hidden;
+.contact {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 5rem 1rem 2rem;
+  background: #f3e5f5;
+  position: relative;
+  overflow: hidden;
 }
 
 /* ---- Stripe card ---- */
-.sectionCard{
-  position:relative;width:100%;max-width:600px;margin:auto;
-  padding:3.25rem 2rem 4.5rem;      /* extra bottom space for ribbon button */
-  background:linear-gradient(83deg,#ab47bc 0 97%,transparent 97%);
-  border-radius:1rem;box-shadow:0 8px 24px rgba(0,0,0,.12);
-  color:#fff;transform:scale(.97);transition:transform .3s ease;
+.sectionCard {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+  padding: 3.25rem 2rem 4.5rem; /* extra bottom space for ribbon button */
+  background: linear-gradient(83deg, #ab47bc 0 97%, transparent 97%);
+  border-radius: 1rem;
+  color: #fff;
+  transform: scale(0.97);
+  transition: transform 0.3s ease;
 }
-.sectionCard:hover{transform:scale(1);}
+.sectionCard:hover {
+  transform: scale(1);
+}
 
 /* ---- Dark ribbon title ---- */
-.cardTitle{
-  background:#2f313a;color:#ffb74d;position:absolute;left:9vmin;top:-2.1em;
-  transform:rotate(-2deg);transform-origin:left bottom;
-  padding:.45em .9em;font-size:2rem;border-radius:.25em;margin:0;z-index:2;
+.cardTitle {
+  background: #2f313a;
+  color: #ffb74d;
+  position: absolute;
+  left: 9vmin;
+  top: -1.7em;
+  transform: rotate(-2deg);
+  transform-origin: left bottom;
+  padding: .45em .9em;
+  font-size: 2rem;
+  border-radius: .25em;
+  margin: 0;
+  z-index: 2;
 }
-@media(max-width:600px){.cardTitle{font-size:1.5rem;}}
-
-/* ---- Form layout ---- */
-.form{display:flex;flex-direction:column;gap:1.5rem;margin-top:1rem;}
-.formGroup{display:flex;flex-direction:column;gap:.5rem;}
-.form label{font-weight:600;color:inherit;}
-
-.form input[type="text"],
-.form input[type="email"],
-.form textarea{
-  width:100%;padding:.75rem 1rem;font-size:1rem;border:1px solid #e1bee7;
-  border-radius:.5rem;transition:border-color .3s ease;background:#ffffff;
-  color:#2f313a;
-}
-.form input:focus,.form textarea:focus{outline:none;border-color:#ffb74d;}
-
-/* ---- Ribbon-style submit button ---- */
-.submitButton{
-  background:#2f313a;color:#ffdd40;border:none;font-weight:600;font-size:1rem;
-  position:absolute;right:9vmin;bottom:-1.9em;
-  transform:rotate(2deg);transform-origin:right top;
-  padding:.6em 1.8em;border-radius:.25em;cursor:pointer;
-  transition:opacity .3s ease;
-}
-.submitButton:hover{opacity:.85;}
-@media(max-width:600px){
-  .submitButton{
-    right:50%;transform:translateX(50%) rotate(2deg);
-    padding:.55em 1.5em;font-size:.9rem;bottom:-1.6em;
+@media (max-width: 600px) {
+  .cardTitle {
+    font-size: 1.5rem;
   }
 }
 
-/* ---- Letter bob animation ---- */
-@keyframes bob{0%{transform:translateY(0);}50%{transform:translateY(-8px);}100%{transform:translateY(0);}}
-.bounce{display:inline-block;animation:bob 1.2s ease-in-out infinite;}
+/* ---- Form layout ---- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+.form label {
+  font-weight: 600;
+  color: inherit;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="tel"],
+.form textarea {
+  width: 100%;
+  padding: .75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #e1bee7;
+  border-radius: .5rem;
+  transition: border-color .3s ease;
+  background: #ffffff;
+  color: #2f313a;
+}
+.form input:focus,
+.form textarea:focus {
+  outline: none;
+  border-color: #ffb74d;
+}
+
+/* ---- Ribbon-style submit button ---- */
+.submitButton {
+  background: #2f313a;
+  color: #ffdd40;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  position: absolute;
+  right: 9vmin;
+  bottom: -1.9em;
+  transform: rotate(2deg);
+  transform-origin: right top;
+  padding: .6em 1.8em;
+  border-radius: .25em;
+  cursor: pointer;
+  transition: opacity .3s ease;
+}
+.submitButton:hover {
+  opacity: .85;
+}
+@media (max-width: 600px) {
+  .submitButton {
+    right: 50%;
+    transform: translateX(50%) rotate(2deg);
+    padding: .55em 1.5em;
+    font-size: .9rem;
+    bottom: -1.6em;
+  }
+}
 
 /* ---- Mobile tweaks ---- */
-@media(max-width:767px){
-  .sectionCard{padding:2.75rem 1rem 4rem;}
-  .form{gap:1rem;}
+@media (max-width: 767px) {
+  .sectionCard {
+    padding: 2.75rem 1rem 4rem;
+  }
+  .form {
+    gap: 1rem;
+  }
 }
