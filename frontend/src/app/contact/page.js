@@ -1,7 +1,8 @@
-// app/contact/page.js
-
 import SkyBackground from '@/components/SkyBackground';
-import styles       from '../../styles/Contact.module.css';
+import styles        from '../../styles/Contact.module.css';
+import { Modak }     from 'next/font/google';
+
+const modak = Modak({ weight: '400', subsets: ['latin'] });
 
 export const metadata = {
   title: 'Contact – Kiwi Explorers',
@@ -9,13 +10,28 @@ export const metadata = {
 };
 
 export default function ContactPage() {
+  /* animated Modak heading */
+  const heading = 'Contact Us'.split('').map((ch, i) => {
+    const dur   = (1 + Math.random()).toFixed(2) + 's';
+    const delay = (-Math.random()).toFixed(2) + 's';
+    return (
+      <span
+        key={i}
+        className={styles.bounce}
+        style={{ animationDuration: dur, animationDelay: delay }}
+      >
+        {ch === ' ' ? '\u00A0' : ch}
+      </span>
+    );
+  });
+
   return (
     <main className={styles.contact}>
-      {/* animated backdrop – client-only */}
       <SkyBackground />
 
-      <section className={styles.content}>
-        <h1>Contact Us</h1>
+      <section className={styles.sectionCard}>
+        <h1 className={`${styles.cardTitle} ${modak.className}`}>{heading}</h1>
+
         <form className={styles.form} action="/api/contact" method="POST">
           <div className={styles.formGroup}>
             <label htmlFor="name">Name</label>
@@ -32,8 +48,9 @@ export default function ContactPage() {
             <textarea id="message" name="message" rows="6" required />
           </div>
 
+          {/* Ribbon-style submit button */}
           <button type="submit" className={styles.submitButton}>
-            Send Message
+            Send&nbsp;Message
           </button>
         </form>
       </section>
