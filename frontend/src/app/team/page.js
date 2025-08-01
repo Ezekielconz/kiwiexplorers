@@ -1,8 +1,8 @@
-import Image           from 'next/image';
-import SkyBackground   from '@/components/SkyBackground';
+import Image from 'next/image';
+import SkyBackground from '@/components/SkyBackground';
 import { getTeamMembers } from '@/lib/strapi';
-import styles          from '../../styles/Team.module.css';
-import { Modak }       from 'next/font/google';
+import styles from '../../styles/Team.module.css';
+import { Modak } from 'next/font/google';
 
 const modak = Modak({
   weight: '400',
@@ -14,33 +14,40 @@ export const metadata = {
   description: 'Get to know the wonderful teachers and staff at Kiwi Explorers.',
 };
 
+// Helper: break a slash-separated role string into lines of max two segments each
+function renderRole(role) {
+  const parts = role.split(' / ').map(p => p.trim());
+  const lines = [];
+
+  for (let i = 0; i < parts.length; i += 2) {
+    lines.push(parts.slice(i, i + 2).join(' / '));
+  }
+
+  return lines.map((line, idx) => (
+    <span key={idx}>
+      {line}
+      {idx < lines.length - 1 && <br />}
+    </span>
+  ));
+}
+
 export default async function TeamPage() {
   const teamMembers = await getTeamMembers();
 
-/* split heading, give every char its own random timing */
-const heading = 'Meet the Team'.split('').map((ch, i) => {
-  /* 1 – 2 s duration, random start phase with negative delay */
-  const duration = (1 + Math.random()).toFixed(2);
-  const delay    = (-Math.random() * duration).toFixed(2);
-
-  return (
-    <span
-      key={i}
-      className={styles.bounce}
-      style={{
-        animationDuration: `${duration}s`,
-        animationDelay:    `${delay}s`,
-      }}
-    >
-      {ch === ' ' ? '\u00A0' : ch}
-    </span>
-  );
-
-  
-});
-
-
-
+  // animated heading letters
+  const heading = 'Meet the Team'.split('').map((ch, i) => {
+    const duration = (1 + Math.random()).toFixed(2);
+    const delay = (-Math.random() * Number(duration)).toFixed(2);
+    return (
+      <span
+        key={i}
+        className={styles.bounce}
+        style={{ animationDuration: `${duration}s`, animationDelay: `${delay}s` }}
+      >
+        {ch === ' ' ? '\u00A0' : ch}
+      </span>
+    );
+  });
 
   return (
     <main className={styles.team}>
@@ -69,7 +76,7 @@ const heading = 'Meet the Team'.split('').map((ch, i) => {
 
                 <div className={styles.description}>
                   <h3 className={styles.name}>{m.name}</h3>
-                  <p className={styles.title}>{m.role}</p>
+                  <p className={styles.title}>{renderRole(m.role)}</p>
                   {m.bio && <p className={styles.bio}>{m.bio}</p>}
                 </div>
               </li>

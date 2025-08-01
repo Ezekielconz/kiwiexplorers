@@ -68,7 +68,7 @@
 
 /* ---- Responsive tweaks ---- */
 @media(max-width:767px){
-  .content{padding:2.5rem 1rem;}
+  .content{padding:2.5rem 0rem;}
   .masonry{column-gap:.75rem;}
     .content h1 {
     font-size: clamp(3rem, 5vw, 2.5rem);
